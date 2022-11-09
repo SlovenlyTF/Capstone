@@ -17,11 +17,16 @@ public class Knight extends ChessPieceClass {
   
   
   @Override
-  boolean movement(int prevX, int prevY, int newX, int newY){
+  boolean movement(int newX, int newY){
     
-    //Checks if the movement done is in an L shape.
-    if((Math.abs(prevX - newX) == 2 && Math.abs(prevY - newY) == 1) || (Math.abs(prevX - newX) == 1 && Math.abs(prevY - newY) == 2)){
-      return true;
+    //Makes sure that the desired position has no piece or it's an enemy piece.
+    if(board.getChessPiece(newX, newY) == null || team != board.getChessPiece(newX, newY).getTeam()){
+    
+      //Checks if the movement done is in an L shape.
+      if((Math.abs(position[0] - newX) == 2 && Math.abs(position[1] - newY) == 1) || (Math.abs(position[0] - newX) == 1 && Math.abs(position[1] - newY) == 2)){
+        revertJustCastled(); //Just set reverts justCastled boolean back after a successful move that is not a castle.
+        return true;
+      }
     }
     return false;
   }

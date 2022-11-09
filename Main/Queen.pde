@@ -17,39 +17,67 @@ public class Queen extends ChessPieceClass {
   
   
   @Override
-  boolean movement(int prevX, int prevY, int newX, int newY){
+  boolean movement(int newX, int newY){
     
-    //Checks if there is a piece between the current position and the desired position.
-    if(prevX < newX && prevY - newY == 0){ //Right
-      for(int i = prevX + 1; i < newX; i++){
-        if(board.getChessPiece(i, prevY) != null){
-          return false;
+    //Makes sure that the desired position has no piece or it's an enemy piece.
+    if(board.getChessPiece(newX, newY) == null || team != board.getChessPiece(newX, newY).getTeam()){
+      
+      //Checks if there is a piece between the current position and the desired position.
+      if(position[0] < newX && position[1] < newY){ //Down Right
+        for(int i = position[0] + 1, j = position[1] + 1; i < newX; i++, j++){ 
+          if(board.getChessPiece(i, j) != null){
+            return false;
+          }
+        }
+      } else if (position[0] > newX && position[1] < newY){ //Down Left
+        for(int i = position[0] - 1, j = position[1] + 1; i > newX; i--, j++){ 
+          if(board.getChessPiece(i, j) != null){
+            return false;
+          }
+        }
+      } else if (position[0] < newX && position[1] > newY){ //Up Right
+        for(int i = position[0] + 1, j = position[1] - 1; i < newX; i++, j--){ 
+          if(board.getChessPiece(i, j) != null){
+            return false;
+          }
+        }
+      } else if (position[0] > newX && position[1] > newY){ //Up Left
+        for(int i = position[0] - 1, j = position[1] - 1; i > newX; i--, j--){ 
+          if(board.getChessPiece(i, j) != null){
+            return false;
+          }
+        }
+      } else if(position[0] < newX && position[1] - newY == 0){ //Right
+        for(int i = position[0] + 1; i < newX; i++){
+          if(board.getChessPiece(i, position[1]) != null){
+            return false;
+          }
+        }
+      } else if (position[0] > newX && position[1] - newY == 0){ //Left
+        for(int i = position[0] - 1; i > newX; i--){
+          if(board.getChessPiece(i, position[1]) != null){
+            return false;
+          }
+        }
+      } else if (position[0] - newX == 0 && position[1] < newY){ //Up
+        for(int i = position[1] + 1; i < newY; i++){
+          if(board.getChessPiece(position[0], i) != null){
+            return false;
+          }
+        }
+      } else { //Down
+        for(int i = position[1] - 1; i > newY; i--){
+          if(board.getChessPiece(position[0], i) != null){
+            return false;
+          }
         }
       }
-    } else if (prevX > newX && prevY - newY == 0){ //Left
-      for(int i = prevX - 1; i > newX; i--){
-        if(board.getChessPiece(i, prevY) != null){
-          return false;
-        }
+      
+      //Checks if the movement done is diagonal or orthogonal.
+      if(Math.abs(position[0] - newX) == Math.abs(position[1] - newY) || position[0] - newX == 0 || position[1] - newY == 0){
+        revertJustCastled(); //Just set reverts justCastled boolean back after a successful move that is not a castle.
+        return true;
       }
-    } else if (prevX - newX == 0 && prevY < newY){ //Up
-      for(int i = prevY + 1; i < newY; i++){
-        if(board.getChessPiece(prevX, i) != null){
-          return false;
-        }
-      }
-    } else { //Down
-      for(int i = prevY - 1; i > newY; i--){
-        if(board.getChessPiece(prevX, i) != null){
-          return false;
-        }
-      }
-    }
-    
-    
-    //Checks if the movement done is diagonal or orthogonal.
-    if(Math.abs(prevX - newX) == Math.abs(prevY - newY) || prevX - newX == 0 || prevY - newY == 0){
-      return true;
     }
     return false;
   }

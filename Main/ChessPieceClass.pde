@@ -5,37 +5,42 @@ public abstract class ChessPieceClass implements ChessPieceInterface{
   protected int position[] = new int[2];
   protected boolean isPickedUp = false;
   protected String type;
+  protected boolean hasMoved = false;
   ChessBoard board;
   ScoreBoard score;
   PImage img;
   
-  void setPosition(int x, int y){
+  public void setPosition(int x, int y){
     position[0] = x;
     position[1] = y;
   }
   
-  int getPosition(int i){
+  public int getPosition(int i){
     return position[i];
   }
   
-  void setTeam(int i){
+  public void setTeam(int i){
     team = i;
   }
   
-  int getTeam(){
+  public int getTeam(){
     return team;
   }
   
-  void setValue(int i){
+  public void setValue(int i){
     value = i;
   }
   
-  int getValue(){
+  public int getValue(){
     return value;
   }
   
-  void setIsPickedUp(boolean i){
+  public void setIsPickedUp(boolean i){
     isPickedUp = i;
+  }
+  
+  public boolean getHasMoved(){
+    return hasMoved;
   }
   
   
@@ -55,5 +60,11 @@ public abstract class ChessPieceClass implements ChessPieceInterface{
     return type;
   }
   
-    
+  //Just set reverts justCastled boolean back after a successful move that is not a castle.
+  public void revertJustCastled(){
+    if(board.getJustCastled()){
+      board.setJustCastled(false);
+    }
+  }
+  
 }

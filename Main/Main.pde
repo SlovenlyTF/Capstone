@@ -1,20 +1,20 @@
-PImage background;
+private PImage background;
 
-ChessBoard board;
-ChessBoard previousMoveBoard;
-ScoreBoard score;
+private ChessBoard board;
+private ChessBoard previousMoveBoard;
+private ScoreBoard score;
 
-boolean pickedUpPiece = false;
-boolean undo = false;
-int prevMovePos[] = new int[2];
+private boolean pickedUpPiece = false;
+private boolean undo = false;
+private int prevMovePos[] = new int[2];
 
-int turn = 0;
+private int turn = 0;
 
 //Mousepress variables
-int prevMouseX;
-int prevMouseY;
-int newMouseX;
-int newMouseY;
+private int prevMouseX;
+private int prevMouseY;
+private int newMouseX;
+private int newMouseY;
 
 
 //Is run once when the program is launched.
@@ -44,9 +44,13 @@ void draw(){
   
   drawChessPieces();
   
+  //Updates the score display.
   score.displayPieces();
   score.displayScore();
   
+  text(turn, 850, 375); //Display the turn counter.
+  
+  //Creates the visual triangle, which is the undo button, on the side.
   fill(0, 0, 0, 150);
   triangle(825,400,875,380,875,420);
 }
@@ -54,10 +58,12 @@ void draw(){
 
 void mousePressed(){
   
+  //Checks if the curser is where the undo button is, when it is pressed.
   if(mouseX > 800 && mouseX < 900 && mouseY > 375 && mouseY < 425){
     undo();
   }
   
+  //makes sure that the curser is inside the chessboard.
   if((int) Math.floor(mouseX / 100) < 8){
     
     prevMouseX = newMouseX;
@@ -65,21 +71,19 @@ void mousePressed(){
     newMouseX = (int) Math.floor(mouseX / 100);
     newMouseY = (int) Math.floor(mouseY / 100);
     
-    
+    //Checks if the user will pick up a piece.
     if(!pickedUpPiece){
       
+      //Checks if the mouse is where a legal piece is.
       if(board.getChessPiece(newMouseX, newMouseY) != null && board.getChessPiece(newMouseX, newMouseY).getTeam() == turn % 2){
-        board.getChessPiece(newMouseX, newMouseY).setIsPickedUp(true);
+        board.getChessPiece(newMouseX, newMouseY).setIsPickedUp(true); //Tells the piece that it is picked up.
         pickedUpPiece = true;
       }
       
-    } else {
+    } else { //When a user already has a piece picked up.
     
       //if the chosen chesspiece can move in that way.
-      if(board.getChessPiece(prevMouseX, prevMouseY).movement(prevMouseX, prevMouseY, newMouseX, newMouseY)){
-        
-        //If there isn't a chesspiece in the space moved to.
-        if((board.getChessPiece(newMouseX, newMouseY) == null) || (board.getChessPiece(newMouseX, newMouseY).getTeam() != board.getChessPiece(prevMouseX, prevMouseY).getTeam())){
+      if(board.getChessPiece(prevMouseX, prevMouseY).movement(newMouseX, newMouseY)){
           
           //saves the previous move.
           previousMoveBoard.setMatrix(board.getMatrix());
@@ -88,21 +92,22 @@ void mousePressed(){
           
           //If the piece kills another.
           if(board.getChessPiece(newMouseX, newMouseY) != null){
-            score.editTeamScore(board.getChessPiece(newMouseX, newMouseY).getValue(), turn % 2, "add");
+            score.addTeamScore(board.getChessPiece(newMouseX, newMouseY).getValue(), turn % 2);
             score.addChessPieceType(board.getChessPiece(newMouseX, newMouseY).getType(), turn % 2);
+            score.setJustKilledPiece(true);
+          } else {
+            score.setJustKilledPiece(false);
           }
           
           board.getChessPiece(prevMouseX, prevMouseY).setIsPickedUp(false); //Lets the picked up piece know that it is not picked up anymore.
           board.setChessPiece(prevMouseX, prevMouseY, newMouseX, newMouseY); //Puts the picked up piece into the cell that matches its new spot.
           board.getChessPiece(prevMouseX, prevMouseY).setPosition(newMouseX, newMouseY); //Sets the piece position inside the piece object.
           board.removeChessPiece(prevMouseX, prevMouseY); //Remove the pointer to the piece in the previous spot.
-          turn++;
+          
+          
+          turn++; //increases the turn number
           undo = true;
           
-        //If there is a chessPiece in the space moved to but it's your own.
-        } else {
-          board.getChessPiece(prevMouseX, prevMouseY).setIsPickedUp(false); //Lets the picked up piece know that it is not picked up anymore.
-        }
       } else {
         board.getChessPiece(prevMouseX, prevMouseY).setIsPickedUp(false); //Lets the picked up piece know that it is not picked up anymore.
       }
@@ -110,22 +115,28 @@ void mousePressed(){
       pickedUpPiece = false;
     }
     
+    println("");
     println("x: " + newMouseX + " " + prevMouseX);
     println("y: " + newMouseY + " " + prevMouseY);
     println(pickedUpPiece);
+    println(turn);
   }
 }
 
 //Undo the last move.
 void undo(){
   if(undo){ //Just a fail safe, so it can't undo multiple times in a row.
-    board.setMatrix(previousMoveBoard.getMatrix()); //Rewinds the board matrix to a matrix saved the previous turn. 
-    board.getChessPiece(prevMovePos[0], prevMovePos[1]).setPosition(prevMovePos[0], prevMovePos[1]);
     
     turn--;
+    if(board.getJustCastled()){
+      board.undoCastle(turn % 2);
+    } else {
+      board.setMatrix(previousMoveBoard.getMatrix()); //Rewinds the board matrix to a matrix saved the previous turn.
+    }
+    board.getChessPiece(prevMovePos[0], prevMovePos[1]).setPosition(prevMovePos[0], prevMovePos[1]);
     
-    score.editTeamScore(score.getPrevScore(), turn % 2, "remove");
-    score.removeChessPieceType(turn % 2);
+    
+    score.undo(turn % 2);
     
     undo = false;
   }

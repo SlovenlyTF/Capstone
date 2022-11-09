@@ -16,39 +16,45 @@ public class Bishop extends ChessPieceClass {
   
   
   @Override
-  boolean movement(int prevX, int prevY, int newX, int newY){
-
+  boolean movement(int newX, int newY){
     
-    //Checks if there is a piece between the current position and the desired position.
-    if(prevX < newX && prevY < newY){ //Down Right
-      for(int i = prevX + 1, j = prevY + 1; i < newX; i++, j++){ 
-        if(board.getChessPiece(i, j) != null){
-          return false;
+    //Makes sure that the desired position has no piece or it's an enemy piece.
+    if(board.getChessPiece(newX, newY) == null || team != board.getChessPiece(newX, newY).getTeam()){
+      
+      
+      
+      //Checks if there is a piece between the current position and the desired position.
+      if(position[0] < newX && position[1] < newY){ //Down Right
+        for(int i = position[0] + 1, j = position[1] + 1; i < newX; i++, j++){ 
+          if(board.getChessPiece(i, j) != null){
+            return false;
+          }
+        }
+      } else if (position[0] > newX && position[1] < newY){ //Down Left
+        for(int i = position[0] - 1, j = position[1] + 1; i > newX; i--, j++){ 
+          if(board.getChessPiece(i, j) != null){
+            return false;
+          }
+        }
+      } else if (position[0] < newX && position[1] > newY){ //Up Right
+        for(int i = position[0] + 1, j = position[1] - 1; i < newX; i++, j--){ 
+          if(board.getChessPiece(i, j) != null){
+            return false;
+          }
+        }
+      } else { //Up Left
+        for(int i = position[0] - 1, j = position[1] - 1; i > newX; i--, j--){ 
+          if(board.getChessPiece(i, j) != null){
+            return false;
+          }
         }
       }
-    } else if (prevX > newX && prevY < newY){ //Down Left
-      for(int i = prevX - 1, j = prevY + 1; i > newX; i--, j++){ 
-        if(board.getChessPiece(i, j) != null){
-          return false;
-        }
+      
+      //Checks if the movement done is diagonal.
+      if(Math.abs(position[0] - newX) == Math.abs(position[1] - newY)){
+        revertJustCastled(); //Just set reverts justCastled boolean back after a successful move that is not a castle.
+        return true;
       }
-    } else if (prevX < newX && prevY > newY){ //Up Right
-      for(int i = prevX + 1, j = prevY - 1; i < newX; i++, j--){ 
-        if(board.getChessPiece(i, j) != null){
-          return false;
-        }
-      }
-    } else { //Up Left
-      for(int i = prevX - 1, j = prevY - 1; i > newX; i--, j--){ 
-        if(board.getChessPiece(i, j) != null){
-          return false;
-        }
-      }
-    }
-    
-    //Checks if the movement done is diagonal.
-    if(Math.abs(prevX - newX) == Math.abs(prevY - newY)){
-      return true;
     }
     return false;
   }
