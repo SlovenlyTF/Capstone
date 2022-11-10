@@ -75,7 +75,7 @@ public class Queen extends ChessPieceClass {
       
       //Checks if the movement done is diagonal or orthogonal.
       if(Math.abs(position[0] - newX) == Math.abs(position[1] - newY) || position[0] - newX == 0 || position[1] - newY == 0){
-        revertJustCastled(); //Just set reverts justCastled boolean back after a successful move that is not a castle.
+        revertVariables(); //Just set reverts justCastled boolean back after a successful move that is not a castle.
         return true;
       }
     }

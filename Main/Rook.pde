@@ -49,7 +49,7 @@ public class Rook extends ChessPieceClass {
       
       //Checks if the movement done is orthogonal.
       if(position[0] - newX == 0 || position[1] - newY == 0){
-        revertJustCastled(); //Just set reverts justCastled boolean back after a successful move that is not a castle.
+        revertVariables(); //Just set reverts justCastled boolean back after a successful move that is not a castle.
         if(!((position[0] == 7 && position[1] == 7) || (position[0] == 7 && position[1] == 0) || (position[0] == 0 && position[1] == 7) || (position[0] == 0 && position[1] == 0))){ //If the rook moved from a non start position.
           hasMoved = true;
         }

@@ -10,6 +10,7 @@ public abstract class ChessPieceClass implements ChessPieceInterface{
   ScoreBoard score;
   PImage img;
   
+  
   public void setPosition(int x, int y){
     position[0] = x;
     position[1] = y;
@@ -48,11 +49,11 @@ public abstract class ChessPieceClass implements ChessPieceInterface{
   void displayImage(){
     if(isPickedUp){
       tint(255, 150);
-      image(img, mouseX - 50, mouseY - 50, 100, 100);
-      image(img, 100*position[0], 100*position[1], 100, 100);
+      image(img, mouseX - (cellSize / 2), mouseY - (cellSize / 2), cellSize, cellSize);
+      image(img, cellSize*position[0], cellSize*position[1], cellSize, cellSize);
       tint(255, 255);
     } else {
-      image(img, 100*position[0], 100*position[1], 100, 100);
+      image(img, cellSize*position[0], cellSize*position[1], cellSize, cellSize);
     }
   }
   
@@ -61,10 +62,39 @@ public abstract class ChessPieceClass implements ChessPieceInterface{
   }
   
   //Just set reverts justCastled boolean back after a successful move that is not a castle.
-  public void revertJustCastled(){
-    if(board.getJustCastled()){
-      board.setJustCastled(false);
+  public void revertVariables(){
+    board.setJustCastled(false);
+    if(turn % 2 == 0){
+      board.setPawnDoubleMoveWhite(false);
+    } else {
+      board.setPawnDoubleMoveBlack(false);
     }
   }
+  
+  
+  
+  //This code should be in the pawn class, but I can't figure out how to call it through this class...
+  protected boolean justDoublePawn = false;
+  protected boolean performedPassant = false;
+  
+  public void setJustDoublePawn(boolean i){
+    justDoublePawn = i;
+    if(i && turn % 2 == 0){
+      board.setPawnDoubleMoveWhite(true);
+    } else if (i){
+      board.setPawnDoubleMoveBlack(true);
+    }
+  }
+  
+  public boolean getJustDoublePawn(){
+    return justDoublePawn;
+  }
+  
+  public boolean getPerformedPassant(){
+    return performedPassant;
+  }
+  //----
+  
+  
   
 }

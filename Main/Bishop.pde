@@ -52,7 +52,7 @@ public class Bishop extends ChessPieceClass {
       
       //Checks if the movement done is diagonal.
       if(Math.abs(position[0] - newX) == Math.abs(position[1] - newY)){
-        revertJustCastled(); //Just set reverts justCastled boolean back after a successful move that is not a castle.
+        revertVariables(); //Just set reverts justCastled boolean back after a successful move that is not a castle.
         return true;
       }
     }

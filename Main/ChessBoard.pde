@@ -1,13 +1,14 @@
 public class ChessBoard{
   
-  boolean justCastled = false;
+  private boolean pawnDoubleMoveWhite = false; //Is a check for if the previous move was a white pawn that moved two spaces.
+  private boolean pawnDoubleMoveBlack = false; //Is a check for if the previous move was a white pawn that moved two spaces.
+  private boolean justCastled = false; //Is a check for if the previous move was a castle.
   
   /**
   *  Stores an int if there is a chess piece is in the square matching the matrix.
   *  The int represent which team it belongs to, so team 0 is white, team 1 is black.
   */
-  private ChessPieceClass chessBoard[][] = new ChessPieceClass[8][8];
-  
+  private ChessPieceClass chessBoard[][] = new ChessPieceClass[boardSize][boardSize];
   
   public ChessPieceClass getChessPiece(int x, int y){
     return chessBoard[x][y];
@@ -29,12 +30,58 @@ public class ChessBoard{
     return justCastled;
   }
   
+  /**Sets the pawn boolean, but also sets all pawns in the row for the double move to equal false.
+  *  There are two, one for white and one for black, because there was an error when trying to undo, and not being able to passant after.
+  */
+  public void setPawnDoubleMoveWhite(boolean setBool){
+    
+    //If a pawn double moved last move.
+    if(pawnDoubleMoveWhite){
+      for(int i = 0; i < boardSize; i++){
+        
+        //Checks for white. Makes sure that it's a pawn in the spot it checks.
+        if(board.getChessPiece(i, boardSize - 4) != null && board.getChessPiece(i, boardSize - 4).getType() == "Pawn"){
+          board.getChessPiece(i, boardSize - 4).setJustDoublePawn(false);
+        }
+      }
+    }
+    
+    pawnDoubleMoveWhite = setBool;
+  }
+  
+  /**Sets the pawn boolean, but also sets all pawns in the row for the double move to equal false.
+  *  There are two, one for white and one for black, because there was an error when trying to undo, and not being able to passant after.
+  */
+  public void setPawnDoubleMoveBlack(boolean setBool){
+    
+    //If a pawn double moved last move.
+    if(pawnDoubleMoveBlack){
+      for(int i = 0; i < boardSize; i++){
+        
+        //Checks for black. Makes sure that it's a pawn in the spot it checks.
+        if(board.getChessPiece(i, 3) != null && board.getChessPiece(i, 3).getType() == "Pawn"){
+          board.getChessPiece(i, 3).setJustDoublePawn(false);
+        }
+      }
+    }
+    
+    pawnDoubleMoveBlack = setBool;
+  }
+  
+  public boolean getPawnDoubleMoveWhite(){
+    return pawnDoubleMoveWhite;
+  }
+  
+  public boolean getPawnDoubleMoveBlack(){
+    return pawnDoubleMoveBlack;
+  }
+  
   //Runs the setup function that matches the selected mode.
-  public void setUp(String mode){
+  public void setUp(String mode, ScoreBoard score){
     switch(mode){
       
       case "standard":
-        standardSetUp();
+        standardSetUp(score);
         break;
       
       default:
@@ -43,37 +90,37 @@ public class ChessBoard{
   }
   
   //Sets up a standard game of chess.
-  private void standardSetUp(){
+  private void standardSetUp(ScoreBoard score){
     
     //Creates Black special pieces
     chessBoard[0][0] = new Rook(1, 0, 0, this);
-    chessBoard[7][0] = new Rook(1, 7, 0, this);
-    chessBoard[1][0] = new Knight(1, 1, 0, this);
-    chessBoard[6][0] = new Knight(1, 6, 0, this);
-    chessBoard[2][0] = new Bishop(1, 2, 0, this);
-    chessBoard[5][0] = new Bishop(1, 5, 0, this);
-    chessBoard[4][0] = new King(1, 4, 0, this);
-    chessBoard[3][0] = new Queen(1, 3, 0, this);
+    chessBoard[boardSize - 1][0] = new Rook(1, boardSize - 1, 0, this);
+    chessBoard[(boardSize / 2) - 3][0] = new Knight(1, (boardSize / 2) - 3, 0, this);
+    chessBoard[(boardSize / 2) + 2][0] = new Knight(1, (boardSize / 2) + 2, 0, this);
+    chessBoard[(boardSize / 2) - 2][0] = new Bishop(1, (boardSize / 2) - 2, 0, this);
+    chessBoard[(boardSize / 2) + 1][0] = new Bishop(1, (boardSize / 2) + 1, 0, this);
+    chessBoard[boardSize / 2][0] = new King(1, boardSize / 2, 0, this);
+    chessBoard[(boardSize / 2) - 1][0] = new Queen(1, (boardSize / 2) - 1, 0, this);
     
     
     //Creates White special pieces
-    chessBoard[0][7] = new Rook(0, 0, 7, this);
-    chessBoard[7][7] = new Rook(0, 7, 7, this);
-    //chessBoard[1][7] = new Knight(0, 1, 7, this);
-    //chessBoard[6][7] = new Knight(0, 6, 7, this);
-    //chessBoard[2][7] = new Bishop(0, 2, 7, this);
-    //chessBoard[5][7] = new Bishop(0, 5, 7, this);
-    chessBoard[4][7] = new King(0, 4, 7, this);
-    //chessBoard[3][7] = new Queen(0, 3, 7, this);
+    chessBoard[0][boardSize - 1] = new Rook(0, 0, boardSize - 1, this);
+    chessBoard[boardSize - 1][boardSize - 1] = new Rook(0, boardSize - 1, boardSize - 1, this);
+    chessBoard[(boardSize / 2) - 3][boardSize - 1] = new Knight(0, (boardSize / 2) - 3, boardSize - 1, this);
+    chessBoard[(boardSize / 2) + 2][boardSize - 1] = new Knight(0, (boardSize / 2) + 2, boardSize - 1, this);
+    chessBoard[(boardSize / 2) - 2][boardSize - 1] = new Bishop(0, (boardSize / 2) - 2, boardSize - 1, this);
+    chessBoard[(boardSize / 2) + 1][boardSize - 1] = new Bishop(0, (boardSize / 2) + 1, boardSize - 1, this);
+    chessBoard[boardSize / 2][boardSize - 1] = new King(0, boardSize / 2, boardSize - 1, this);
+    chessBoard[(boardSize / 2) - 1][boardSize - 1] = new Queen(0, (boardSize / 2) - 1, boardSize - 1, this);
     
     //Creates the black pawns.
-    for(int i = 0; i <= 7; i++){
-      chessBoard[i][1] = new Pawn(1, i, 1, this);
+    for(int i = 0; i < boardSize; i++){
+      chessBoard[i][1] = new Pawn(1, i, 1, this, score);
     }
     
     //Creates the white pawns.
-    for(int i = 0; i <= 7; i++){
-      chessBoard[i][6] = new Pawn(0, i, 6, this);
+    for(int i = 0; i < boardSize; i++){
+      chessBoard[i][boardSize - 2] = new Pawn(0, i, boardSize - 2, this, score);
     }
   }
   
@@ -89,8 +136,8 @@ public class ChessBoard{
   }
   
   public void setMatrix(ChessPieceClass[][] other){
-    for(int i = 0; i < 8; i++){
-      for(int j = 0; j < 8; j++){
+    for(int i = 0; i < boardSize; i++){
+      for(int j = 0; j < boardSize; j++){
         chessBoard[i][j] = other[i][j];
       }
     }
@@ -100,16 +147,16 @@ public class ChessBoard{
     if(justCastled){
       
       if(team == 0){
-        if(chessBoard[2][7] != null && chessBoard[2][7].getType() == "King"){
-          chessBoard[3][7].setPosition(0, 7);
+        if(chessBoard[2][boardSize - 1] != null && chessBoard[2][boardSize - 1].getType() == "King"){
+          chessBoard[3][boardSize - 1].setPosition(0, 7);
           setMatrix(previousMoveBoard.getMatrix());
-          chessBoard[0][7] = chessBoard[3][7];
-          chessBoard[3][7] = null;
+          chessBoard[0][boardSize - 1] = chessBoard[3][boardSize - 1];
+          chessBoard[3][boardSize - 1] = null;
         } else {
-          chessBoard[5][7].setPosition(7, 7);
+          chessBoard[5][boardSize - 1].setPosition(7, 7);
           setMatrix(previousMoveBoard.getMatrix());
-          chessBoard[7][7] = chessBoard[5][7];
-          chessBoard[5][7] = null;
+          chessBoard[boardSize - 1][boardSize - 1] = chessBoard[5][boardSize - 1];
+          chessBoard[5][boardSize - 1] = null;
         }
       } else {
         if(chessBoard[2][0] != null && chessBoard[2][0].getType() == "King"){
@@ -120,7 +167,7 @@ public class ChessBoard{
         } else {
           chessBoard[5][0].setPosition(7, 0);
           setMatrix(previousMoveBoard.getMatrix());
-          chessBoard[7][0] = chessBoard[5][0];
+          chessBoard[boardSize - 1][0] = chessBoard[5][0];
           chessBoard[5][0] = null;
         }
       }
@@ -132,7 +179,7 @@ public class ChessBoard{
   public void spawnNewPiece(int x, int y, int team, String type){
     switch(type){
       case "pawn":
-        chessBoard[x][y] = new Pawn(team, x, y, this);
+        chessBoard[x][y] = new Pawn(team, x, y, this, score);
         break;
       
       case "bishop":
