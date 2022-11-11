@@ -32,31 +32,31 @@ public class King extends ChessPieceClass {
       
       boolean canCastle = true;
       //Small castle.
-      if(newX == (boardSize / 2) + 2 && position[0] == boardSize / 2 && !hasMoved && board.getChessPiece(boardSize - 1, position[1]) != null && board.getChessPiece(boardSize - 1, position[1]).getType() == "Rook" && !board.getChessPiece(boardSize - 1, position[1]).getHasMoved()){
-        for(int i = position[0] + 1; i < boardSize - 1; i++){
+      if(newX == (game.getBoardSize() / 2) + 2 && position[0] == game.getBoardSize() / 2 && !hasMoved && board.getChessPiece(game.getBoardSize() - 1, position[1]) != null && board.getChessPiece(game.getBoardSize() - 1, position[1]).getType() == "Rook" && !board.getChessPiece(game.getBoardSize() - 1, position[1]).getHasMoved()){
+        for(int i = position[0] + 1; i < game.getBoardSize() - 1; i++){
           if(board.getChessPiece(i, position[1]) != null){
             canCastle = false;
           }
         }
         if(canCastle){
-          board.setChessPiece(boardSize - 1, position[1], (boardSize / 2) + 1, position[1]); //Puts the picked up piece into the cell that matches its new spot.
-          board.getChessPiece(boardSize - 1, position[1]).setPosition((boardSize / 2) + 1, position[1]); //Sets the piece position inside the piece object.
-          board.removeChessPiece(boardSize - 1, position[1]); //Remove the pointer to the piece in the previous spot.
+          board.setChessPiece(game.getBoardSize() - 1, position[1], (game.getBoardSize() / 2) + 1, position[1]); //Puts the picked up piece into the cell that matches its new spot.
+          board.getChessPiece(game.getBoardSize() - 1, position[1]).setPosition((game.getBoardSize() / 2) + 1, position[1]); //Sets the piece position inside the piece object.
+          board.removeChessPiece(game.getBoardSize() - 1, position[1]); //Remove the pointer to the piece in the previous spot.
           board.setJustCastled(true); //Tells the board that it just castled, so if the user undo, it can undo the castle.
           return true;
         }
       }
       
       //Long castle.
-      if(newX == (boardSize / 2) - 2 && position[0] == boardSize / 2 && !hasMoved && board.getChessPiece(0, position[1]) != null && board.getChessPiece(0, position[1]).getType() == "Rook" && !board.getChessPiece(0, position[1]).getHasMoved()){
+      if(newX == (game.getBoardSize() / 2) - 2 && position[0] == game.getBoardSize() / 2 && !hasMoved && board.getChessPiece(0, position[1]) != null && board.getChessPiece(0, position[1]).getType() == "Rook" && !board.getChessPiece(0, position[1]).getHasMoved()){
         for(int i = position[0] - 1; i > 0; i--){
           if(board.getChessPiece(i, position[1]) != null){
             canCastle = false;
           }
         }
         if(canCastle){
-          board.setChessPiece(0, position[1], (boardSize / 2) - 1, position[1]); //Puts the picked up piece into the cell that matches its new spot.
-          board.getChessPiece(0, position[1]).setPosition((boardSize / 2) - 1, position[1]); //Sets the piece position inside the piece object.
+          board.setChessPiece(0, position[1], (game.getBoardSize() / 2) - 1, position[1]); //Puts the picked up piece into the cell that matches its new spot.
+          board.getChessPiece(0, position[1]).setPosition((game.getBoardSize() / 2) - 1, position[1]); //Sets the piece position inside the piece object.
           board.removeChessPiece(0, position[1]); //Remove the pointer to the piece in the previous spot.
           board.setJustCastled(true); //Tells the board that it just castled, so if the user undo, it can undo the castle.
           return true;

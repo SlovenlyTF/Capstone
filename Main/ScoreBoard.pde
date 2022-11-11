@@ -79,7 +79,7 @@ public class ScoreBoard{
   
   void displayScore(){
     fill(0, 0, 0);
-    textAlign(CENTER);
+    //textAlign(CENTER);
     textSize(40);
     text(teamScore[1], 850, 50);
     text(teamScore[0], 850, 780);

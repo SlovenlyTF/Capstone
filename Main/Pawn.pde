@@ -1,15 +1,14 @@
 public class Pawn extends ChessPieceClass {
   
-  ScoreBoard score;
   
-  Pawn(int setTeam, int x, int y, ChessBoard tempBoard, ScoreBoard tempScore){
+  
+  Pawn(int setTeam, int x, int y, ChessBoard tempBoard){
     team = setTeam;
     value = 1;
     position[0] = x;
     position[1] = y;
     type = "Pawn";
     board = tempBoard;
-    score = tempScore;
     if(team == 0){
       img = loadImage("Images/White Pawn.png");
     } else {
@@ -21,13 +20,13 @@ public class Pawn extends ChessPieceClass {
   @Override
   public boolean movement(int newX, int newY){
     
-    if(!(position[1] == 1 || position[1] == boardSize - 2)){ //If the rook moved from a non start position.
+    if(!(position[1] == 1 || position[1] == game.getBoardSize() - 2)){ //If the rook moved from a non start position.
       hasMoved = true;
     }
   
     
     if(board.getChessPiece(newX, newY) == null){
-      //Check if it is in its original position and that it tries to move two spaces..
+      //Check if it is in its original position and that it tries to move two spaces.
       if(!hasMoved && ((position[0] - newX == 0 && position[1] - newY == 2 && board.getChessPiece(position[0], position[1] - 1) == null) || (position[0] - newX == 0 && newY - position[1] == 2 && board.getChessPiece(position[0], position[1] + 1) == null))){
         
         return doublePawn();
@@ -37,7 +36,7 @@ public class Pawn extends ChessPieceClass {
         
         if(board.getChessPiece(newX, newY - 1) != null && board.getChessPiece(newX, newY - 1).getJustDoublePawn()){
         
-          passant(-1);
+          passant(-1, newX, newY);
           return true;
           
         }
@@ -48,7 +47,7 @@ public class Pawn extends ChessPieceClass {
       
         if(board.getChessPiece(newX, newY + 1) != null && board.getChessPiece(newX, newY + 1).getJustDoublePawn()){
         
-          passant(1);
+          passant(1, newX, newY);
           return true;
           
         }
@@ -78,14 +77,14 @@ public class Pawn extends ChessPieceClass {
     return false;
   }
   
-  private void passant(int i){
+  private void passant(int i, int newX, int newY){
     revertVariables(); //Just set reverts justCastled boolean back after a successful move that is not a castle.
-    score.addTeamScore(1, turn % 2);
-    score.addChessPieceType("Pawn", turn % 2);
+    game.score.addTeamScore(1, game.turn % 2);
+    game.score.addChessPieceType("Pawn", game.turn % 2);
     
-    previousMoveBoard.setMatrix(board.getMatrix());
+    game.previousMoveBoard.setMatrix(board.getMatrix());
     
-    board.removeChessPiece(newMouseX, newMouseY + i);
+    board.removeChessPiece(newX, newY + i);
     performedPassant = true;
   }
   
@@ -93,7 +92,7 @@ public class Pawn extends ChessPieceClass {
     revertVariables(); //Just set reverts justCastled boolean back after a successful move that is not a castle.
     performedPassant = false;
     justDoublePawn = true;
-    if(turn % 2 == 0){
+    if(game.turn % 2 == 0){
       board.setPawnDoubleMoveWhite(true);
     } else {
       board.setPawnDoubleMoveBlack(true);
@@ -110,7 +109,7 @@ public class Pawn extends ChessPieceClass {
   
   //Converts the pawn to a queen when reaching the others base.
   private void convertQueen(int x, int y, int checkY, int team){
-    if(checkY == 0 || checkY == boardSize - 1){
+    if(checkY == 0 || checkY == game.getBoardSize() - 1){
       board.removeChessPiece(x, y);
       board.spawnNewPiece(x, y, team, "queen");
     }

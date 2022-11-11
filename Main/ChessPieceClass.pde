@@ -8,8 +8,8 @@ public abstract class ChessPieceClass implements ChessPieceInterface{
   protected boolean hasMoved = false;
   ChessBoard board;
   ScoreBoard score;
-  PImage img;
   
+  PImage img;
   
   public void setPosition(int x, int y){
     position[0] = x;
@@ -49,11 +49,11 @@ public abstract class ChessPieceClass implements ChessPieceInterface{
   void displayImage(){
     if(isPickedUp){
       tint(255, 150);
-      image(img, mouseX - (cellSize / 2), mouseY - (cellSize / 2), cellSize, cellSize);
-      image(img, cellSize*position[0], cellSize*position[1], cellSize, cellSize);
+      image(img, mouseX - (game.getCellSize() / 2), mouseY - (game.getCellSize() / 2), game.getCellSize(), game.getCellSize());
+      image(img, game.getCellSize()*position[0], game.getCellSize()*position[1], game.getCellSize(), game.getCellSize());
       tint(255, 255);
     } else {
-      image(img, cellSize*position[0], cellSize*position[1], cellSize, cellSize);
+      image(img, game.getCellSize()*position[0], game.getCellSize()*position[1], game.getCellSize(), game.getCellSize());
     }
   }
   
@@ -64,7 +64,7 @@ public abstract class ChessPieceClass implements ChessPieceInterface{
   //Just set reverts justCastled boolean back after a successful move that is not a castle.
   public void revertVariables(){
     board.setJustCastled(false);
-    if(turn % 2 == 0){
+    if(game.turn % 2 == 0){
       board.setPawnDoubleMoveWhite(false);
     } else {
       board.setPawnDoubleMoveBlack(false);
@@ -79,7 +79,7 @@ public abstract class ChessPieceClass implements ChessPieceInterface{
   
   public void setJustDoublePawn(boolean i){
     justDoublePawn = i;
-    if(i && turn % 2 == 0){
+    if(i && game.turn % 2 == 0){
       board.setPawnDoubleMoveWhite(true);
     } else if (i){
       board.setPawnDoubleMoveBlack(true);

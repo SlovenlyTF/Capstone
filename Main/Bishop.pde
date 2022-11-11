@@ -19,7 +19,7 @@ public class Bishop extends ChessPieceClass {
   boolean movement(int newX, int newY){
     
     //Makes sure that the desired position has no piece or it's an enemy piece.
-    if(board.getChessPiece(newX, newY) == null || team != board.getChessPiece(newX, newY).getTeam()){
+    if(game.board.getChessPiece(newX, newY) == null || team != board.getChessPiece(newX, newY).getTeam()){
       
       
       
