@@ -54,3 +54,7 @@ void keyPressed() {
   }
   
 }
+
+void keyReleased(){
+  keyCode = 0;
+}

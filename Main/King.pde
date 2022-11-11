@@ -24,9 +24,9 @@ public class King extends ChessPieceClass {
       //Checks if the movement done is one space from its original postition.
       if(Math.abs(position[0] - newX) < 2 && Math.abs(position[1] - newY) < 2){
         revertVariables(); //Just set reverts justCastled boolean back after a successful move that is not a castle.
-        if(!((position[0] == 4 && position[1] == 7) || (position[0] == 4 && position[1] == 0))){ //If the king moved from a non start position
-          hasMoved = true;
-        }
+        
+        prevHasMoved = hasMoved;
+        hasMoved = true;
         return true;
       }
       
@@ -43,6 +43,9 @@ public class King extends ChessPieceClass {
           board.getChessPiece(game.getBoardSize() - 1, position[1]).setPosition((game.getBoardSize() / 2) + 1, position[1]); //Sets the piece position inside the piece object.
           board.removeChessPiece(game.getBoardSize() - 1, position[1]); //Remove the pointer to the piece in the previous spot.
           board.setJustCastled(true); //Tells the board that it just castled, so if the user undo, it can undo the castle.
+          
+          prevHasMoved = hasMoved;
+          hasMoved = true;
           return true;
         }
       }
@@ -59,6 +62,9 @@ public class King extends ChessPieceClass {
           board.getChessPiece(0, position[1]).setPosition((game.getBoardSize() / 2) - 1, position[1]); //Sets the piece position inside the piece object.
           board.removeChessPiece(0, position[1]); //Remove the pointer to the piece in the previous spot.
           board.setJustCastled(true); //Tells the board that it just castled, so if the user undo, it can undo the castle.
+          
+          prevHasMoved = hasMoved;
+          hasMoved = true;
           return true;
         }
       }

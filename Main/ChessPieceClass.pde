@@ -5,6 +5,7 @@ public abstract class ChessPieceClass implements ChessPieceInterface{
   protected int position[] = new int[2];
   protected boolean isPickedUp = false;
   protected String type;
+  protected boolean prevHasMoved = false;
   protected boolean hasMoved = false;
   ChessBoard board;
   ScoreBoard score;
@@ -44,6 +45,14 @@ public abstract class ChessPieceClass implements ChessPieceInterface{
     return hasMoved;
   }
   
+  public void setHasMoved(boolean i){
+    hasMoved = i;
+  }
+  
+  public boolean getPrevHasMoved(){
+    return prevHasMoved;
+  }
+  
   
   //Creates the visual image of the
   void displayImage(){
@@ -64,7 +73,7 @@ public abstract class ChessPieceClass implements ChessPieceInterface{
   //Just set reverts justCastled boolean back after a successful move that is not a castle.
   public void revertVariables(){
     board.setJustCastled(false);
-    if(game.turn % 2 == 0){
+    if(game.getTurn() % 2 == 0){
       board.setPawnDoubleMoveWhite(false);
     } else {
       board.setPawnDoubleMoveBlack(false);
@@ -79,11 +88,17 @@ public abstract class ChessPieceClass implements ChessPieceInterface{
   
   public void setJustDoublePawn(boolean i){
     justDoublePawn = i;
-    if(i && game.turn % 2 == 0){
+    if(i && game.getTurn() % 2 == 0){
       board.setPawnDoubleMoveWhite(true);
     } else if (i){
       board.setPawnDoubleMoveBlack(true);
     }
+  }
+  
+  public void convert(int x, int y){
+    board.removeChessPiece(x, y);
+    board.spawnNewPiece(x, y, game.getTurn() % 2 - 1, board.getSelectedType());
+    board.setPieceSelectionPawn(false);
   }
   
   public boolean getJustDoublePawn(){

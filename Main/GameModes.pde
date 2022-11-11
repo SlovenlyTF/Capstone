@@ -16,6 +16,10 @@ public class GameModes { //This class is kinda unnesesary. It was just to split 
       case 1:
         knightSetUp();
         break;
+      
+      case 2:
+        pointBuySystem();
+        break;
         
       default:
         break;
@@ -61,7 +65,6 @@ public class GameModes { //This class is kinda unnesesary. It was just to split 
     
     for(int i = 0; i < game.getBoardSize(); i++){
       if(!(i == game.getBoardSize() / 2 || i == game.getBoardSize() / 2 - 1)){
-        println("test");
         board.chessBoard[i][0] = new Knight(1, i, 0, board);
       }
     }
@@ -78,6 +81,11 @@ public class GameModes { //This class is kinda unnesesary. It was just to split 
     }
     
     createPawns(); //Creates the pawns.
+  }
+  
+  
+  public void pointBuySystem() {
+    board.setPieceSelection(true);
   }
   
   

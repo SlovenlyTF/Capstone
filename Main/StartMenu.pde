@@ -1,12 +1,16 @@
 public class StartMenu {
   
-  PImage leftArrow;
-  PImage rightArrow;
-  PImage startGameText;
-  PImage loadGameText;
-  PImage boardSizeText;
-  PImage numbers[] = new PImage[7];
-  PImage gamemodes[] = new PImage[2];
+  private PImage leftArrow;
+  private PImage leftArrowNoShine;
+  private PImage rightArrow;
+  private PImage startGameText;
+  private PImage loadGameText;
+  private PImage boardSizeText;
+  private PImage numbers[] = new PImage[7];
+  private PImage gamemodes[] = new PImage[3];
+  private int points = 39;
+  
+  private int gamemodeAmount = 3;
   
   Game game;
   
@@ -22,6 +26,7 @@ public class StartMenu {
     boardSizeText = loadImage("Images/Board Size Text.png");
     rightArrow = loadImage("Images/Right Arrow.png");
     leftArrow = loadImage("Images/Left Arrow.png");
+    leftArrowNoShine = loadImage("Images/Left Arrow No Shine.png");
     
     for(int i = 8, j = 0; i <= 20; i += 2, j++){
       numbers[j] = loadImage("Images/" + i + ".png");
@@ -29,6 +34,8 @@ public class StartMenu {
     
     gamemodes[0] = loadImage("Images/Standard Mode.png");
     gamemodes[1] = loadImage("Images/Knight Mode.png");
+    gamemodes[2] = loadImage("Images/Point Buy.png");
+    
   }
   
   public void startMenuDraw(){
@@ -54,12 +61,20 @@ public class StartMenu {
     if(game.getGameMode() > 0){
       image(leftArrow, 120, 610, 100, 80);
     }
-    if(game.getGameMode() < 1){
+    if(game.getGameMode() < gamemodeAmount - 1){
       image(rightArrow, 780, 610, -100, 80);
     }
     
-    /*fill(0, 0, 0, 0);
-    rect(680, 600, 100, 100);*/
+    
+    if(game.getGameMode() == 2){
+      textSize(40);
+      text(points, 450, 730);
+      fill(0, 0, 0, 0);
+      if(points > 10){
+        image(leftArrowNoShine, 350, 690, 50, 50);
+      }
+      image(rightArrow, 500, 690, 50, 50);
+    }
     
     
   }
@@ -68,6 +83,7 @@ public class StartMenu {
     
     if(mouseX > 100 && mouseX < 800 && mouseY > 100 && mouseY < 300){
       game.startGame();
+      game.board.setPoints(points);
     } else if(mouseX > 100 && mouseX < 800 && mouseY > 300 && mouseY < 500){
       println("does nothing right now");
     } else if(mouseX > 120 && mouseX < 220 && mouseY > 500 && mouseY < 600 && game.getBoardSize() > 8){
@@ -76,10 +92,24 @@ public class StartMenu {
       game.setBoardSize(game.getBoardSize() + 2);
     } else if(mouseX > 120 && mouseX < 220 && mouseY > 600 && mouseY < 700 && game.getGameMode() > 0){
       game.setGameMode(game.getGameMode() - 1);
-    } else if(mouseX > 680 && mouseX < 780 && mouseY > 600 && mouseY < 700 && game.getGameMode() < 1){
+    } else if(mouseX > 680 && mouseX < 780 && mouseY > 600 && mouseY < 700 && game.getGameMode() < gamemodeAmount - 1){
       game.setGameMode(game.getGameMode() + 1);
+    } else if(mouseX > 350 && mouseX < 400 && mouseY > 690 && mouseY < 740 && game.getGameMode() == 2){
+      if(keyCode == SHIFT){
+        points -= 5;
+      } else {
+        points--;
+      }
+      if(points < 10){
+        points = 10;
+      }
+    } else if(mouseX > 500 && mouseX < 550 && mouseY > 690 && mouseY < 740 && game.getGameMode() == 2){
+      if(keyCode == SHIFT){
+        points += 5;
+      } else {
+        points++;
+      }
     }
-    
     
     //if(mouseX <
   }
