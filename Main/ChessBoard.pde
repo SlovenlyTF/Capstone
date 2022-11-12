@@ -1,7 +1,5 @@
 public class ChessBoard{
   
-  
-  
   private boolean pawnDoubleMoveWhite = false; //Is a check for if the previous move was a white pawn that moved two spaces.
   private boolean pawnDoubleMoveBlack = false; //Is a check for if the previous move was a white pawn that moved two spaces.
   private boolean justCastled = false; //Is a check for if the previous move was a castle.
@@ -40,7 +38,7 @@ public class ChessBoard{
   *  Stores an int if there is a chess piece is in the square matching the matrix.
   *  The int represent which team it belongs to, so team 0 is white, team 1 is black.
   */
-  private ChessPieceClass chessBoard[][] = new ChessPieceClass[game.getBoardSize()][game.getBoardSize()];
+  public ChessPieceClass chessBoard[][] = new ChessPieceClass[game.getBoardSize()][game.getBoardSize()];
   
   public ChessPieceClass getChessPiece(int x, int y){
     return chessBoard[x][y];

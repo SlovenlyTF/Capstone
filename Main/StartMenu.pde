@@ -13,10 +13,11 @@ public class StartMenu {
   private int gamemodeAmount = 3;
   
   Game game;
+  SaveAndLoad saveAndLoadData;
   
-  public StartMenu(Game tempGame){
+  public StartMenu(Game tempGame, SaveAndLoad tempSaveAndLoadData){
     game = tempGame;
-    
+    saveAndLoadData = tempSaveAndLoadData;
   }
   
   public void startMenuSetup(){
@@ -82,10 +83,10 @@ public class StartMenu {
   public void startMenuMousePressed(){
     
     if(mouseX > 100 && mouseX < 800 && mouseY > 100 && mouseY < 300){
-      game.startGame();
+      game.startGame(true);
       game.board.setPoints(points);
     } else if(mouseX > 100 && mouseX < 800 && mouseY > 300 && mouseY < 500){
-      println("does nothing right now");
+      saveAndLoadData.loadData(game);
     } else if(mouseX > 120 && mouseX < 220 && mouseY > 500 && mouseY < 600 && game.getBoardSize() > 8){
       game.setBoardSize(game.getBoardSize() - 2);
     } else if(mouseX > 680 && mouseX < 780 && mouseY > 500 && mouseY < 600 && game.getBoardSize() < 20){

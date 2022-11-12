@@ -3,6 +3,7 @@ public class Game {
   public ChessBoard board;
   public ChessBoard previousMoveBoard;
   public ScoreBoard score;
+  public SaveAndLoad saveAndLoad;
   
   private boolean pickedUpPiece = false;
   private boolean undo = false;
@@ -20,8 +21,20 @@ public class Game {
   private int boardSize = 8;
   private int cellSize;
   
+  public Game(SaveAndLoad tempSaveAndLoadData){
+    saveAndLoad = tempSaveAndLoadData;
+  }
+  
   public int getTurn(){
     return turn;
+  }
+  
+  public void setTurn(int i){
+    turn = i;
+  }
+  
+  public boolean getWon(int i){
+    return won[i];
   }
   
   public void setBoardSize(int i){
@@ -65,7 +78,7 @@ public class Game {
     }
   }
   
-  public void startGame(){
+  public void startGame(boolean newGame){
     
     cellSize = 800 / boardSize;
     
@@ -73,7 +86,10 @@ public class Game {
     score = new ScoreBoard();
     previousMoveBoard = new ChessBoard();
     
-    board.setUp(gameMode);
+    if(newGame){
+      board.setUp(gameMode);
+    }
+    
     startScreen = false;
     
   }
@@ -186,6 +202,7 @@ public class Game {
             
             turn++; //increases the turn number
             undo = true;
+            saveAndLoad.saveData(this);
               
           } else {
             board.getChessPiece(prevMouse[0], prevMouse[1]).setIsPickedUp(false); //Lets the picked up piece know that it is not picked up anymore.
@@ -221,25 +238,36 @@ public class Game {
   void undo(){
     if(undo){ //Just a fail safe, so it can't undo multiple times in a row.
       
+      //Reduce the turn variable, so it maches and doesn't mess up the turn order. 
       turn--;
+      
+      //Checks to see if the board has just castled, since it moves to spaces, and hos to do something extra to undo that.
       if(board.getJustCastled()){
         board.undoCastle(turn % 2);
       } else {
         board.setMatrix(previousMoveBoard.getMatrix()); //Rewinds the board matrix to a matrix saved the previous turn.
       }
+      
+      //There is a couple moves you can only do if a piece hasn't moved before. Here we revert it, so it still "hasn't moved" if it hadn't before the this turn.
       if(!board.getChessPiece(prevMovePos[0], prevMovePos[1]).getPrevHasMoved()){
         board.getChessPiece(prevMovePos[0], prevMovePos[1]).setHasMoved(false);
       }
       
+      //Resets the moved piece internal position.
       board.getChessPiece(prevMovePos[0], prevMovePos[1]).setPosition(prevMovePos[0], prevMovePos[1]);
       
-      
+      //Runs an undo function in the score class, which undo the anything that happend to the score this turn.
       score.undo(turn % 2);
       
+      //Sets the boolean to false, since you can't undo more than one move.
       undo = false;
+      
+      //Saves the data, so the save data file is the turn before the current turn that has just been undone.
+      saveAndLoad.saveData(this);
     }
   }
   
+  //If the key z is pressed, it also undo the last turn.
   void gameKeyPressed() {
     if(key == 'z' && !board.getPieceSelection() && !board.getPieceSelectionPawn()){
       undo();
@@ -247,6 +275,7 @@ public class Game {
   }
   
   
+  //Display the image of all the pieces.
   void drawChessPieces(){
     for(int i = 0; i < boardSize; i++){
       for(int j = 0; j < boardSize; j++){
@@ -258,25 +287,31 @@ public class Game {
   }
   
   
+  //Display the checkers pattern that a chessboard has.
   void chessBoardSquares(){
     boolean white = false;
     
+    //Loops through the y-axis.
     for(int i = 0; i < boardSize; i++){
-      if(white){
+      
+      if(white){ //Since every other row is offset, do we have to put in this "switch" to offset it.
           white = false;
         } else {
           white = true;
         }
+        
+      //Loops through the x-axis.
       for(int j = 0; j < boardSize; j++){
         
-        if(white){
-          fill(255, 255, 255, 60);
+        if(white){ //Sets the color for the black and white squars.
+          fill(255, 255, 255, 60); //Sets the color to white with quite a high transparancy. 
           white = false;
         } else {
-          fill(0, 0, 0, 60);
+          fill(0, 0, 0, 60); //Sets the color to black with quite a high transparancy. 
           white = true;
         }      
         
+        //This is the actual squars that is created.
         rect(j*cellSize, i*cellSize, cellSize, cellSize);
       }
     }

@@ -2,18 +2,23 @@ private boolean startScreen = true;
 
 private PImage background;
 
-private Game game = new Game();
-private StartMenu startMenu = new StartMenu(game);
+public SaveAndLoad saveAndLoadData;
+private Game game;
+private StartMenu startMenu;
 
 
 //Is run once when the program is launched.
 void setup() {
   
   size(900, 800); //Sets the window size.
-  frameRate(30); //Sets the framerate.
+  frameRate(60); //Sets the framerate.
   
   textAlign(CENTER);
   background = loadImage("Images/Marble Background.png"); //Loads in the image for the background.
+  
+  saveAndLoadData = new SaveAndLoad();
+  game = new Game(saveAndLoadData);
+  startMenu = new StartMenu(game, saveAndLoadData);
   
   game.gameSetup();
   startMenu.startMenuSetup();
