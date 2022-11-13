@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Data>
-  <gameData boardSize="8" turn="1"/>
+  <gameData boardSize="8" turn="0"/>
   <boardData>
     <cellData hasMoved="0" team="1" type="Rook"/>
     <cellData hasMoved="0" team="1" type="Knight"/>
@@ -38,7 +38,7 @@
     <cellData type="Empty"/>
     <cellData type="Empty"/>
     <cellData type="Empty"/>
-    <cellData hasMoved="1" team="0" type="Pawn"/>
+    <cellData type="Empty"/>
     <cellData type="Empty"/>
     <cellData type="Empty"/>
     <cellData type="Empty"/>
@@ -54,7 +54,7 @@
     <cellData hasMoved="0" team="0" type="Pawn"/>
     <cellData hasMoved="0" team="0" type="Pawn"/>
     <cellData hasMoved="0" team="0" type="Pawn"/>
-    <cellData type="Empty"/>
+    <cellData hasMoved="0" team="0" type="Pawn"/>
     <cellData hasMoved="0" team="0" type="Pawn"/>
     <cellData hasMoved="0" team="0" type="Pawn"/>
     <cellData hasMoved="0" team="0" type="Pawn"/>

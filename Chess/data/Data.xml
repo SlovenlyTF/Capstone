@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Data>
-  <gameData boardSize="8" turn="9"/>
+  <gameData boardSize="8" turn="0"/>
   <boardData>
     <cellData hasMoved="0" team="1" type="Rook"/>
     <cellData hasMoved="0" team="1" type="Knight"/>
@@ -11,35 +11,35 @@
     <cellData hasMoved="0" team="1" type="Knight"/>
     <cellData hasMoved="0" team="1" type="Rook"/>
     <cellData hasMoved="0" team="1" type="Pawn"/>
-    <cellData type="Empty"/>
-    <cellData type="Empty"/>
-    <cellData type="Empty"/>
     <cellData hasMoved="0" team="1" type="Pawn"/>
     <cellData hasMoved="0" team="1" type="Pawn"/>
     <cellData hasMoved="0" team="1" type="Pawn"/>
     <cellData hasMoved="0" team="1" type="Pawn"/>
-    <cellData type="Empty"/>
-    <cellData type="Empty"/>
-    <cellData hasMoved="1" team="1" type="Pawn"/>
-    <cellData type="Empty"/>
-    <cellData type="Empty"/>
-    <cellData type="Empty"/>
-    <cellData type="Empty"/>
-    <cellData type="Empty"/>
-    <cellData type="Empty"/>
-    <cellData type="Empty"/>
-    <cellData hasMoved="0" team="0" type="Knight"/>
-    <cellData hasMoved="1" team="1" type="Pawn"/>
+    <cellData hasMoved="0" team="1" type="Pawn"/>
+    <cellData hasMoved="0" team="1" type="Pawn"/>
+    <cellData hasMoved="0" team="1" type="Pawn"/>
     <cellData type="Empty"/>
     <cellData type="Empty"/>
     <cellData type="Empty"/>
     <cellData type="Empty"/>
     <cellData type="Empty"/>
-    <cellData hasMoved="1" team="1" type="Pawn"/>
     <cellData type="Empty"/>
-    <cellData hasMoved="1" team="0" type="Pawn"/>
     <cellData type="Empty"/>
-    <cellData hasMoved="0" team="0" type="Bishop"/>
+    <cellData type="Empty"/>
+    <cellData type="Empty"/>
+    <cellData type="Empty"/>
+    <cellData type="Empty"/>
+    <cellData type="Empty"/>
+    <cellData type="Empty"/>
+    <cellData type="Empty"/>
+    <cellData type="Empty"/>
+    <cellData type="Empty"/>
+    <cellData type="Empty"/>
+    <cellData type="Empty"/>
+    <cellData type="Empty"/>
+    <cellData type="Empty"/>
+    <cellData type="Empty"/>
+    <cellData type="Empty"/>
     <cellData type="Empty"/>
     <cellData type="Empty"/>
     <cellData type="Empty"/>
@@ -53,14 +53,14 @@
     <cellData hasMoved="0" team="0" type="Pawn"/>
     <cellData hasMoved="0" team="0" type="Pawn"/>
     <cellData hasMoved="0" team="0" type="Pawn"/>
-    <cellData type="Empty"/>
+    <cellData hasMoved="0" team="0" type="Pawn"/>
     <cellData hasMoved="0" team="0" type="Pawn"/>
     <cellData hasMoved="0" team="0" type="Pawn"/>
     <cellData hasMoved="0" team="0" type="Pawn"/>
     <cellData hasMoved="0" team="0" type="Pawn"/>
     <cellData hasMoved="0" team="0" type="Rook"/>
-    <cellData type="Empty"/>
-    <cellData type="Empty"/>
+    <cellData hasMoved="0" team="0" type="Knight"/>
+    <cellData hasMoved="0" team="0" type="Bishop"/>
     <cellData hasMoved="0" team="0" type="Queen"/>
     <cellData hasMoved="0" team="0" type="King"/>
     <cellData hasMoved="0" team="0" type="Bishop"/>

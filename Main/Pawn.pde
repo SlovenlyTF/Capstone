@@ -1,7 +1,5 @@
 public class Pawn extends ChessPieceClass {
   
-  
-  
   Pawn(int setTeam, int x, int y, ChessBoard tempBoard){
     team = setTeam;
     value = 1;

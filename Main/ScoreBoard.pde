@@ -146,7 +146,7 @@ public class ScoreBoard{
   }
   
   
-  void loadImages(){
+  private void loadImages(){
     blackPawn = loadImage("Images/Black Pawn.png");
     whitePawn = loadImage("Images/White Pawn.png");
     blackBishop = loadImage("Images/Black Bishop.png");
@@ -161,4 +161,15 @@ public class ScoreBoard{
     whiteKing = loadImage("Images/White King.png");
   }
   
+  
+  public void resetScoreboard(){
+    for(int i = 0; i < killedChessPiecesTeamWhite.size(); i++){
+      killedChessPiecesTeamWhite.remove(killedChessPiecesTeamWhite.size() - 1);
+    }
+    for(int i = 0; i < killedChessPiecesTeamBlack.size(); i++){
+      killedChessPiecesTeamBlack.remove(killedChessPiecesTeamBlack.size() - 1);
+    }
+    teamScore[0] = 0;
+    teamScore[1] = 0;
+  }
 }

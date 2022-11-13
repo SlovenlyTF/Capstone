@@ -2,11 +2,10 @@ public class SaveAndLoad {
   
   XML Data;
   
-  public SaveAndLoad(){
-     Data = loadXML("Data.xml");
-  }
   
   public void loadData(Game game){
+    Data = loadXML("Data.xml");
+    
     XML gameData = Data.getChild("gameData");
     
     
@@ -91,27 +90,37 @@ public class SaveAndLoad {
 
   
   public void saveData(Game game){
-    //Deletes previous save. I would have to edit everything anyway, and this way i get around some problems with different boardsizes.
-    File DeleteFile = new File(sketchPath("Data/Data.xml"));
-    DeleteFile.delete();
     
-    //Creates the file.
-    PrintWriter NewSave = createWriter(sketchPath("Data/Data.xml"));
-    NewSave.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-    NewSave.println("<Data>");
-    NewSave.println("</Data>");
-    NewSave.close();
+    XML TemplateData = loadXML("Template Data.xml");
     
-    //Just loads the newly created fil, so we have XML variable to edit.
-    Data = loadXML("Data.xml");
+    if(TemplateData == null){
+      //Creates the file.
+      PrintWriter NewSave = createWriter(sketchPath("Data/Template Data.xml"));
+      NewSave.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+      NewSave.println("<Data>");
+      NewSave.println("</Data>");
+      NewSave.close();
+      
+      //Just loads the newly created fil, so we have XML variable to edit.
+      TemplateData = loadXML("Template Data.xml");
+      
+      TemplateData.addChild("gameData");
+      TemplateData.addChild("boardData");
+      XML tempScore = TemplateData.addChild("scoreData");
+      tempScore.addChild("whiteKilled");
+      tempScore.addChild("blackKilled");
+      tempScore.addChild("points");
+      
+      saveXML(TemplateData, "Data/Template Data.xml");
+    }
     
     //Saves the turn and boardsize.
-    XML gameData = Data.addChild("gameData");
+    XML gameData = TemplateData.getChild("gameData");
     gameData.setInt("boardSize", game.getBoardSize());
     gameData.setInt("turn", game.getTurn());
     
     //Is the parent for the board, where all the cells will be saved.
-    XML boardData = Data.addChild("boardData");
+    XML boardData = TemplateData.getChild("boardData");
     
     //Loops through all the cells.
     for(int i = 0; i < game.getBoardSize(); i++){
@@ -139,26 +148,26 @@ public class SaveAndLoad {
     }
     
     //Creates a place to store the data from the scoreboard.
-    XML scoreData = Data.addChild("scoreData");
+    XML scoreData = TemplateData.getChild("scoreData");
     
     //Creates a child to hold all the pieces white has killed. :(
-    XML whiteKilled = scoreData.addChild("whiteKilled");
+    XML whiteKilled = scoreData.getChild("whiteKilled");
     for(int i = 0; i < game.score.killedChessPiecesTeamWhite.size(); i++){ //Loops through the string list.
       XML casualty = whiteKilled.addChild("casualty");
       casualty.setContent(game.score.killedChessPiecesTeamWhite.get(i));
     }
     
     //Creates a child to hold all the pieces black has killed. :(
-    XML blackKilled = scoreData.addChild("blackKilled");
+    XML blackKilled = scoreData.getChild("blackKilled");
     for(int i = 0; i < game.score.killedChessPiecesTeamBlack.size(); i++){ //Loops through the string list.
       XML casualty = blackKilled.addChild("casualty");
       casualty.setContent(game.score.killedChessPiecesTeamBlack.get(i));
     }
     
-    XML points = scoreData.addChild("points");
+    XML points = scoreData.getChild("points");
     points.setInt("white", game.score.getTeamScore(0));
     points.setInt("black", game.score.getTeamScore(1));
     
-    saveXML(Data, "Data/Data.xml");
+    saveXML(TemplateData, "Data/Data.xml");
   }
 }

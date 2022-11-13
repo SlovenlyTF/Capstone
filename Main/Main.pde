@@ -56,7 +56,16 @@ void keyPressed() {
   
   if(!startScreen){
     game.gameKeyPressed();
+    
+    //Back to main menu.
+    if(keyCode == BACKSPACE){
+      startScreen = true;
+      game.board = null;
+      game.setTurn(0);
+      game.score.resetScoreboard();
+    }
   }
+  
   
 }
 
