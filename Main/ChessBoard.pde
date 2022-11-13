@@ -306,6 +306,8 @@ public class ChessBoard{
       }
     }
     
+    
+    //This was just to see the hitbox for the selection bar.
     /*
     fill(0,0,0,50);
     rect(800,100,100,100); //Pawn
