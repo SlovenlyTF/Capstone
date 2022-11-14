@@ -82,6 +82,10 @@ public class Game {
     
     cellSize = 800 / boardSize;
     
+    won[0] = false;
+    won[1] = false;
+    undo = false;
+    
     board = new ChessBoard();
     score = new ScoreBoard();
     previousMoveBoard = new ChessBoard();
