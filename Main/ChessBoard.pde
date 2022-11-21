@@ -6,13 +6,13 @@ public class ChessBoard{
   
   //For selecting what the pawn gets transformed into.
   private boolean pieceSelectionPawn = false;
-  private int pawnPosition[] = new int[2];
+  private Vector2D pawnPosition = new Vector2D(0, 0);
   
   //For selection of pieces in point buy gamemode.
   private boolean pieceSelection = false;
   private int teamTurn = 0;
-  private int points[] = {39, 39};
-  private int piecesPlaced[] = {0, 0};
+  private IntList points = new IntList(39, 39);
+  private IntList piecesPlaced = new IntList(0, 0);
   private String selectedType;
   private int selectionCost;
   private PImage whitePawnImg;
@@ -29,8 +29,8 @@ public class ChessBoard{
   private PImage blackKingImg;
   private PImage SelectedPieceImg;
   
-  
-  private int mousePosition[] = game.getNewMouse();
+  //game.getNewMouse()
+  private Vector2D mousePosition = new Vector2D(0, 0);
   
   private GameModes gameModes = new GameModes(this);
   
@@ -40,16 +40,16 @@ public class ChessBoard{
   */
   public ChessPieceClass chessBoard[][] = new ChessPieceClass[game.getBoardSize()][game.getBoardSize()];
   
-  public ChessPieceClass getChessPiece(int x, int y){
-    return chessBoard[x][y];
+  public ChessPieceClass getChessPiece(Vector2D coords){
+    return chessBoard[coords.getX()][coords.getY()];
   }
   
-  public void setChessPiece(int prevX, int prevY, int x, int y){
-    chessBoard[x][y] = chessBoard[prevX][prevY];
+  public void setChessPiece(Vector2D prevCoords, Vector2D coords){
+    chessBoard[coords.getX()][coords.getY()] = chessBoard[prevCoords.getX()][prevCoords.getY()];
   }
   
-  public void removeChessPiece(int x, int y){
-    chessBoard[x][y] = null;
+  public void removeChessPiece(Vector2D coords){
+    chessBoard[coords.getX()][coords.getY()] = null;
   }
   
   public void setJustCastled(boolean i){
@@ -76,9 +76,8 @@ public class ChessBoard{
     return pieceSelectionPawn;
   }
   
-  public void setPawnPosition(int[] i){
-    pawnPosition[0] = i[0];
-    pawnPosition[1] = i[1];
+  public void setPawnPosition(Vector2D coords){
+    pawnPosition = coords;
   }
   
   public void setSelectedType(String i){
@@ -90,8 +89,8 @@ public class ChessBoard{
   }
   
   public void setPoints(int i){
-    points[0] = i;
-    points[1] = i;
+    points.set(0, i);
+    points.set(1, i);
   }
   
   public ChessBoard(){
@@ -118,11 +117,13 @@ public class ChessBoard{
     
     //If a pawn double moved last move.
     if(pawnDoubleMoveWhite){
-      for(int i = 0; i < game.getBoardSize(); i++){
-        
-        //Checks for white. Makes sure that it's a pawn in the spot it checks.
-        if(game.board.getChessPiece(i, game.getBoardSize() - 4) != null && game.board.getChessPiece(i, game.getBoardSize() - 4).getType() == "Pawn"){
-          game.board.getChessPiece(i, game.getBoardSize() - 4).setJustDoublePawn(false);
+      for(int j = game.getBoardSize() - 2; j > (game.getBoardSize() / 2) - 2; j--){
+        for(int i = 0; i < game.getBoardSize(); i++){
+          
+          //Checks for white. Makes sure that it's a pawn in the spot it checks.
+          if(game.board.getChessPiece(new Vector2D(i, j)) != null && game.board.getChessPiece(new Vector2D(i, j)).getType() == "Pawn"){
+            game.board.getChessPiece(new Vector2D(i, j)).setJustDoublePawn(false);
+          }
         }
       }
     }
@@ -138,11 +139,12 @@ public class ChessBoard{
     
     //If a pawn double moved last move.
     if(pawnDoubleMoveBlack){
-      for(int i = 0; i < game.getBoardSize(); i++){
-        
-        //Checks for black. Makes sure that it's a pawn in the spot it checks.
-        if(game.board.getChessPiece(i, 3) != null && game.board.getChessPiece(i, 3).getType() == "Pawn"){
-          game.board.getChessPiece(i, 3).setJustDoublePawn(false);
+      for(int j = 2; j < (game.getBoardSize() / 2) + 2; j++){
+        for(int i = 0; i < game.getBoardSize(); i++){
+          //Checks for black. Makes sure that it's a pawn in the spot it checks.
+          if(game.board.getChessPiece(new Vector2D(i, j)) != null && game.board.getChessPiece(new Vector2D(i, j)).getType() == "Pawn"){
+            game.board.getChessPiece(new Vector2D(i, j)).setJustDoublePawn(false);
+          }
         }
       }
     }
@@ -173,19 +175,19 @@ public class ChessBoard{
   }
   
   
-  public int getValue(int x, int y){
-    if(chessBoard[x][y] != null){ //Makes sure that there is a piece to get the value from.
-      return chessBoard[x][y].getValue();
+  public int getValue(Vector2D coords){
+    if(chessBoard[coords.getY()][coords.getY()] != null){ //Makes sure that there is a piece to get the value from.
+      return chessBoard[coords.getY()][coords.getY()].getValue();
     }
     return -1;
   }
   
   
   //Runs through the matrix and copies each field.
-  public void setMatrix(ChessPieceClass[][] other){
+  public void setMatrix(ChessPieceClass[][] otherBoard){
     for(int i = 0; i < game.getBoardSize(); i++){
       for(int j = 0; j < game.getBoardSize(); j++){
-        chessBoard[i][j] = other[i][j];
+        chessBoard[i][j] = otherBoard[i][j];
       }
     }
   }
@@ -196,24 +198,24 @@ public class ChessBoard{
       
       if(team == 0){ //Checks if team is white.
         if(chessBoard[(game.getBoardSize() / 2) - 2][game.getBoardSize() - 1] != null && chessBoard[(game.getBoardSize() / 2) - 2][game.getBoardSize() - 1].getType() == "King"){ //Checks if the king is moved to the left in the castle.
-          chessBoard[(game.getBoardSize() / 2) - 1][game.getBoardSize() - 1].setPosition(0, game.getBoardSize() - 1); //Sets the rook object position back.
+          chessBoard[(game.getBoardSize() / 2) - 1][game.getBoardSize() - 1].setPosition(new Vector2D(0, game.getBoardSize() - 1)); //Sets the rook object position back.
           setMatrix(game.previousMoveBoard.getMatrix()); //Reverts the board matrix back for the king.
           chessBoard[0][game.getBoardSize() - 1] = chessBoard[(game.getBoardSize() / 2) - 1][game.getBoardSize() - 1]; //Puts the rook back in the chessboard matrix because the previousMoveBoard didn't save it, since it's only made for one piece to move at a time.
           chessBoard[(game.getBoardSize() / 2) - 1][game.getBoardSize() - 1] = null; //Deletes the rook from it's castle position.
         } else { //If the king is moved to the Right in the castle.
-          chessBoard[(game.getBoardSize() / 2) + 1][game.getBoardSize() - 1].setPosition(game.getBoardSize() - 1, game.getBoardSize() - 1); //Sets the rook object position back.
+          chessBoard[(game.getBoardSize() / 2) + 1][game.getBoardSize() - 1].setPosition(new Vector2D(game.getBoardSize() - 1, game.getBoardSize() - 1)); //Sets the rook object position back.
           setMatrix(game.previousMoveBoard.getMatrix()); //Reverts the board matrix back for the king.
           chessBoard[game.getBoardSize() - 1][game.getBoardSize() - 1] = chessBoard[(game.getBoardSize() / 2) + 1][game.getBoardSize() - 1]; //Puts the rook back in the chessboard matrix because the previousMoveBoard didn't save it, since it's only made for one piece to move at a time.
           chessBoard[(game.getBoardSize() / 2) + 1][game.getBoardSize() - 1] = null; //Deletes the rook from it's castle position.
         }
       } else { //Checks if team is black.
         if(chessBoard[(game.getBoardSize() / 2) - 2][0] != null && chessBoard[(game.getBoardSize() / 2) - 2][0].getType() == "King"){ //Checks if the king is moved to the left in the castle.
-          chessBoard[(game.getBoardSize() / 2) - 1][0].setPosition(0, 0); //Sets the rook object position back.
+          chessBoard[(game.getBoardSize() / 2) - 1][0].setPosition(new Vector2D(0, 0)); //Sets the rook object position back.
           setMatrix(game.previousMoveBoard.getMatrix()); //Reverts the board matrix back for the king.
           chessBoard[0][0] = chessBoard[(game.getBoardSize() / 2) - 1][0]; //Puts the rook back in the chessboard matrix because the previousMoveBoard didn't save it, since it's only made for one piece to move at a time.
           chessBoard[(game.getBoardSize() / 2) - 1][0] = null; //Deletes the rook from it's castle position.
         } else { //If the king is moved to the Right in the castle.
-          chessBoard[(game.getBoardSize() / 2) + 1][0].setPosition(game.getBoardSize() - 1, 0); //Sets the rook object position back.
+          chessBoard[(game.getBoardSize() / 2) + 1][0].setPosition(new Vector2D(game.getBoardSize() - 1, 0)); //Sets the rook object position back.
           setMatrix(game.previousMoveBoard.getMatrix()); //Reverts the board matrix back for the king.
           chessBoard[game.getBoardSize() - 1][0] = chessBoard[(game.getBoardSize() / 2) + 1][0]; //Puts the rook back in the chessboard matrix because the previousMoveBoard didn't save it, since it's only made for one piece to move at a time.
           chessBoard[(game.getBoardSize() / 2) + 1][0] = null; //Deletes the rook from it's castle position.
@@ -228,7 +230,7 @@ public class ChessBoard{
   public void drawSelectionBar(){
     fill(0,0,0);
     
-    if(pieceSelectionPawn){
+    if(pieceSelectionPawn){ //If it is mid game and it is because a pawn moved to the end of the board.
       if((game.getTurn() % 2) - 1 == 0){
         image(whitePawnImg, 800, 100, 100, 100); //Pawn
         image(whiteBishopImg, 800, 225, 100, 100); //Bishop
@@ -242,31 +244,30 @@ public class ChessBoard{
         image(blackRookImg, 800, 475, 100, 100); //Rook
         image(blackQueenImg, 800, 600, 100, 100); //Queen
       }
-    } else {
+    } else { //If it is in the point buy game mode.
       
-      
-      if(piecesPlaced[teamTurn] == (game.getBoardSize() * (game.getBoardSize() / 2 - 1)) - 1 && points[teamTurn] >= 0){
-        points[teamTurn] = 0;
+      if(piecesPlaced.get(teamTurn) == (game.getBoardSize() * (game.getBoardSize() / 2 - 1)) - 1 && points.get(teamTurn) >= 0){
+        points.set(teamTurn, 0);
       }
       
-      if(points[0] == 0 && points[1] == 0){
-        points[0] = -1;
-        points[1] = -1;
+      if(points.get(0) == 0 && points.get(1) == 0){
+        points.set(0, -1);
+        points.set(1, -1);
         teamTurn = 0;
         game.setPickedUpPiece(true);
         selectedType = "King";
         SelectedPieceImg = whiteKingImg;
-      } else if (teamTurn == 0 && points[0] == 0){
+      } else if (teamTurn == 0 && points.get(0) == 0){
         teamTurn = 1;
-      } else if (teamTurn == 1 && points[1] == 0){
+      } else if (teamTurn == 1 && points.get(1) == 0){
         teamTurn = 0;
       }
       
       textSize(40);
-      if(points[teamTurn] > 0){
-        text(points[teamTurn], 850, 50);
+      if(points.get(teamTurn) > 0){
+        text(points.get(teamTurn), 850, 50);
       }
-      if(teamTurn == 0 && points[teamTurn] > 0){
+      if(teamTurn == 0 && points.get(teamTurn) > 0){
         textSize(25);
         image(whitePawnImg, 800, 100, 100, 100); //Pawn
         text("1", 850, 207);
@@ -280,7 +281,7 @@ public class ChessBoard{
         text("9", 850, 707);
         
         
-      } else if(points[teamTurn] > 0){
+      } else if(points.get(teamTurn) > 0){
         textSize(25);
         image(blackPawnImg, 800, 100, 100, 100); //Pawn
         text("1", 850, 207);
@@ -321,108 +322,90 @@ public class ChessBoard{
   public void mousePressedSelectionBarPawn(){
     if(mouseX > 800 && mouseX < 900 && mouseY > 100 && mouseY < 200){
       selectedType = "Pawn";
-      chessBoard[pawnPosition[0]][pawnPosition[1]].convert(pawnPosition[0], pawnPosition[1]);
+      chessBoard[pawnPosition.getX()][pawnPosition.getY()].convert(pawnPosition);
       
     } else if (mouseX > 800 && mouseX < 900 && mouseY > 225 && mouseY < 325){
       selectedType = "Bishop";
-      chessBoard[pawnPosition[0]][pawnPosition[1]].convert(pawnPosition[0], pawnPosition[1]);
+      chessBoard[pawnPosition.getX()][pawnPosition.getY()].convert(pawnPosition);
       
     } else if (mouseX > 800 && mouseX < 900 && mouseY > 350 && mouseY < 450){
       selectedType = "Knight";
-      chessBoard[pawnPosition[0]][pawnPosition[1]].convert(pawnPosition[0], pawnPosition[1]);
+      chessBoard[pawnPosition.getX()][pawnPosition.getY()].convert(pawnPosition);
       
     } else if (mouseX > 800 && mouseX < 900 && mouseY > 475 && mouseY < 575){
       selectedType = "Rook";
-      chessBoard[pawnPosition[0]][pawnPosition[1]].convert(pawnPosition[0], pawnPosition[1]);
+      chessBoard[pawnPosition.getX()][pawnPosition.getY()].convert(pawnPosition);
       
     } else if (mouseX > 800 && mouseX < 900 && mouseY > 600 && mouseY < 700){
       selectedType = "Queen";
-      chessBoard[pawnPosition[0]][pawnPosition[1]].convert(pawnPosition[0], pawnPosition[1]);
+      chessBoard[pawnPosition.getX()][pawnPosition.getY()].convert(pawnPosition);
     }
     
   }
   
+  public void selectPiecePointBuy(String type, int cost, PImage whiteTeam, PImage BlackTeam){
+    selectedType = type;
+    selectionCost = cost;
+    game.setPickedUpPiece(true);
+    if(teamTurn == 0){
+      SelectedPieceImg = whiteTeam;
+    } else {
+      SelectedPieceImg = BlackTeam;
+    }
+  }
   
   public void mousePressedSelectionBar(){
-    if(mouseX > 800 && mouseX < 900 && mouseY > 100 && mouseY < 200 && points[teamTurn] > 0){
-      selectedType = "Pawn";
-      selectionCost = 1;
-      game.setPickedUpPiece(true);
-      if(teamTurn == 0){
-        SelectedPieceImg = whitePawnImg;
-      } else {
-        SelectedPieceImg = blackPawnImg;
-      }
+    
+    
+    if(mouseX > 800 && mouseX < 900 && mouseY > 100 && mouseY < 200 && points.get(teamTurn) > 0){
       
-    } else if (mouseX > 800 && mouseX < 900 && mouseY > 225 && mouseY < 325 && points[teamTurn] > 2){
-      selectedType = "Bishop";
-      selectionCost = 3;
-      game.setPickedUpPiece(true);
-      if(teamTurn == 0){
-        SelectedPieceImg = whiteBishopImg;
-      } else {
-        SelectedPieceImg = blackBishopImg;
-      }
+      selectPiecePointBuy("Pawn", 1, whitePawnImg, blackPawnImg);
       
-    } else if (mouseX > 800 && mouseX < 900 && mouseY > 350 && mouseY < 450 && points[teamTurn] > 2){
-      selectedType = "Knight";
-      selectionCost = 3;
-      game.setPickedUpPiece(true);
-      if(teamTurn == 0){
-        SelectedPieceImg = whiteKnightImg;
-      } else {
-        SelectedPieceImg = blackKnightImg;
-      }
+    } else if (mouseX > 800 && mouseX < 900 && mouseY > 225 && mouseY < 325 && points.get(teamTurn) > 2){
       
-    } else if (mouseX > 800 && mouseX < 900 && mouseY > 475 && mouseY < 575 && points[teamTurn] > 4){
-      selectedType = "Rook";
-      selectionCost = 5;
-      game.setPickedUpPiece(true);
-      if(teamTurn == 0){
-        SelectedPieceImg = whiteRookImg;
-      } else {
-        SelectedPieceImg = blackRookImg;
-      }
+      selectPiecePointBuy("Bishop", 3, whiteBishopImg, blackBishopImg);
       
-    } else if (mouseX > 800 && mouseX < 900 && mouseY > 600 && mouseY < 700 && points[teamTurn] > 8){
-      selectedType = "Queen";
-      selectionCost = 9;
-      game.setPickedUpPiece(true);
-      if(teamTurn == 0){
-        SelectedPieceImg = whiteQueenImg;
-      } else {
-        SelectedPieceImg = blackQueenImg;
-      }
+    } else if (mouseX > 800 && mouseX < 900 && mouseY > 350 && mouseY < 450 && points.get(teamTurn) > 2){
+      
+      selectPiecePointBuy("Knight", 3, whiteKnightImg, blackKnightImg);
+      
+    } else if (mouseX > 800 && mouseX < 900 && mouseY > 475 && mouseY < 575 && points.get(teamTurn) > 4){
+      
+      selectPiecePointBuy("Rook", 5, whiteRookImg, blackRookImg);
+      
+    } else if (mouseX > 800 && mouseX < 900 && mouseY > 600 && mouseY < 700 && points.get(teamTurn) > 8){
+      
+      selectPiecePointBuy("Queen", 9, whiteQueenImg, blackQueenImg);
     }
     
     
-    if(game.getPickedUpPiece() && (int) Math.floor(mouseX / game.getCellSize()) < game.getBoardSize() && chessBoard[mousePosition[0]][mousePosition[1]] == null){
-      println(mousePosition[0] + " " + mousePosition[1]);
-      if(teamTurn == 0 && mousePosition[1] > (game.getBoardSize() / 2) && points[0] >= 0){
+    if(game.getPickedUpPiece() && (int) Math.floor(mouseX / game.getCellSize()) < game.getBoardSize() && chessBoard[mousePosition.getX()][mousePosition.getY()] == null){
+      println(mousePosition.getX() + " " + mousePosition.getY());
+      if(teamTurn == 0 && mousePosition.getY() > (game.getBoardSize() / 2) && points.get(0) >= 0){
         placeSelectedPiece();
         teamTurn = 1;
       }
       
       
-      if(teamTurn == 1 && mousePosition[1] < (game.getBoardSize() / 2) - 1 && points[1] >= 0){
+      if(teamTurn == 1 && mousePosition.getY() < (game.getBoardSize() / 2) - 1 && points.get(1) >= 0){
         placeSelectedPiece();
         teamTurn = 0;
       }
       
       println((game.getBoardSize() * (game.getBoardSize() / 2 - 1)) - 1);
-      println("placed: " + piecesPlaced[teamTurn]);
+      println("placed: " + piecesPlaced.get(teamTurn));
       
       //When both players have put all their pieces down.
-      if(points[0] == -1 && points[1] == -1){
+      if(points.get(0) == -1 && points.get(1) == -1){
         
-        if(teamTurn == 0 && mousePosition[1] > (game.getBoardSize() / 2)){
-          spawnNewPiece(mousePosition[0], mousePosition[1], 0, selectedType);
+        if(teamTurn == 0 && mousePosition.getY() > (game.getBoardSize() / 2)){
+          spawnNewPiece(mousePosition, 0, selectedType);
           SelectedPieceImg = blackKingImg;
           teamTurn = 1;
         }
         
-        if(teamTurn == 1 && mousePosition[1] < (game.getBoardSize() / 2) - 1){
-          spawnNewPiece(mousePosition[0], mousePosition[1], 1, selectedType);
+        if(teamTurn == 1 && mousePosition.getY() < (game.getBoardSize() / 2) - 1){
+          spawnNewPiece(mousePosition, 1, selectedType);
           game.setPickedUpPiece(false);
           pieceSelection = false;
         }
@@ -434,38 +417,38 @@ public class ChessBoard{
   
   //Places the selected piece if it is possible and legal in the point buy gamemode.
   public void placeSelectedPiece(){
-    spawnNewPiece(mousePosition[0], mousePosition[1], teamTurn, selectedType); //Spawns the piece on the board.
+    spawnNewPiece(mousePosition, teamTurn, selectedType); //Spawns the piece on the board.
     game.setPickedUpPiece(false); //Sets so the player hasn't automatically a piece picked. 
     selectedType = null; //So the player doesn't accidentally place a piece they didn't select.
-    piecesPlaced[teamTurn] += 1; //Keeps track of the amount of pieces the player has put down.
-    points[teamTurn] -= selectionCost; //Subtracks the cost of the selected piece from the points available.
+    piecesPlaced.set(teamTurn, piecesPlaced.get(teamTurn) + 1); //Keeps track of the amount of pieces the player has put down.
+    points.set(teamTurn, points.get(teamTurn) - selectionCost); //Subtracks the cost of the selected piece from the points available.
   }
   
   
-  public void spawnNewPiece(int x, int y, int team, String type){
+  public void spawnNewPiece(Vector2D coords, int team, String type){
     switch(type){
       case "Pawn":
-        chessBoard[x][y] = new Pawn(team, x, y, this);
+        chessBoard[coords.getX()][coords.getY()] = new Pawn(team, coords, this);
         break;
       
       case "Bishop":
-        chessBoard[x][y] = new Bishop(team, x, y, this);
+        chessBoard[coords.getX()][coords.getY()] = new Bishop(team, coords, this);
         break;
         
       case "Knight":
-        chessBoard[x][y] = new Knight(team, x, y, this);
+        chessBoard[coords.getX()][coords.getY()] = new Knight(team, coords, this);
         break;
         
       case "Rook":
-        chessBoard[x][y] = new Rook(team, x, y, this);
+        chessBoard[coords.getX()][coords.getY()] = new Rook(team, coords, this);
         break;
         
       case "Queen":
-        chessBoard[x][y] = new Queen(team, x, y, this);
+        chessBoard[coords.getX()][coords.getY()] = new Queen(team, coords, this);
         break;
         
       case "King":
-        chessBoard[x][y] = new King(team, x, y, this);
+        chessBoard[coords.getX()][coords.getY()] = new King(team, coords, this);
         break;
     }
   }

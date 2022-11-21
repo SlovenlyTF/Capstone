@@ -14,7 +14,7 @@ public class ScoreBoard{
   PImage whiteKing;
   
   private int prevScore;
-  private int teamScore[] = {0, 0};
+  private IntList teamScore = new IntList(0, 0);
   private StringList killedChessPiecesTeamWhite;
   private StringList killedChessPiecesTeamBlack;
   private boolean justKilledPiece = false;
@@ -26,7 +26,7 @@ public class ScoreBoard{
   }
   
   public int getTeamScore(int team){
-    return teamScore[team];
+    return teamScore.get(team);
   }
   
   public int getPrevScore(){
@@ -65,14 +65,14 @@ public class ScoreBoard{
   }
   
   public void setTeamScore(int score, int team){
-    teamScore[team] = score;
+    teamScore.set(team, score);
   }
   
   public void addTeamScore(int score, int team){
     //saves the score that passes through, in case of an undo.
     prevScore = score;
     
-    teamScore[team] += score;
+    teamScore.set(team, teamScore.get(team) + score);
   }
     
     
@@ -81,8 +81,8 @@ public class ScoreBoard{
     fill(0, 0, 0);
     //textAlign(CENTER);
     textSize(40);
-    text(teamScore[1], 850, 50);
-    text(teamScore[0], 850, 780);
+    text(teamScore.get(0), 850, 50);
+    text(teamScore.get(1), 850, 780);
   }
   
   
@@ -169,7 +169,7 @@ public class ScoreBoard{
     for(int i = 0; i < killedChessPiecesTeamBlack.size(); i++){
       killedChessPiecesTeamBlack.remove(killedChessPiecesTeamBlack.size() - 1);
     }
-    teamScore[0] = 0;
-    teamScore[1] = 0;
+    teamScore.set(0, 0);
+    teamScore.set(1, 0);
   }
 }

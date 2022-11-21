@@ -6,8 +6,8 @@ public class StartMenu {
   private PImage startGameText;
   private PImage loadGameText;
   private PImage boardSizeText;
-  private PImage numbers[] = new PImage[7];
-  private PImage gamemodes[] = new PImage[3];
+  private ArrayList<PImage> numbers = new ArrayList();
+  private ArrayList<PImage> gamemodes = new ArrayList<PImage>();
   private int points = 39;
   
   private int gamemodeAmount = 3;
@@ -29,13 +29,13 @@ public class StartMenu {
     leftArrow = loadImage("Images/Left Arrow.png");
     leftArrowNoShine = loadImage("Images/Left Arrow No Shine.png");
     
-    for(int i = 8, j = 0; i <= 20; i += 2, j++){
-      numbers[j] = loadImage("Images/" + i + ".png");
+    for(int i = 8; i <= 20; i += 2){
+      numbers.add(loadImage("Images/" + i + ".png"));
     }
     
-    gamemodes[0] = loadImage("Images/Standard Mode.png");
-    gamemodes[1] = loadImage("Images/Knight Mode.png");
-    gamemodes[2] = loadImage("Images/Point Buy.png");
+    gamemodes.add(loadImage("Images/Standard Mode.png"));
+    gamemodes.add(loadImage("Images/Knight Mode.png"));
+    gamemodes.add(loadImage("Images/Point Buy.png"));
     
   }
   
@@ -46,8 +46,8 @@ public class StartMenu {
     image(startGameText, 100, 100, 700, 200);
     image(loadGameText, 100, 300, 700, 200);
     image(boardSizeText, 230, 500, 350, 100);
-    image(numbers[(game.getBoardSize() - 8) / 2], 570, 505, 100, 100);
-    image(gamemodes[game.getGameMode()], 250, 600, 350, 100);
+    image(numbers.get((game.getBoardSize() - 8) / 2), 570, 505, 100, 100);
+    image(gamemodes.get(game.getGameMode()), 250, 600, 350, 100);
     //text(game.getBoardSize(), 615, 580);
     
     //Board size arrows.

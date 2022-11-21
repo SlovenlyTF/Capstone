@@ -1,4 +1,4 @@
 public interface ChessPieceInterface {
   
-  boolean movement(int newX, int newY);
+  boolean movement(Vector2D newCoords);
 }

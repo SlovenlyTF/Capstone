@@ -7,15 +7,15 @@ public class Game {
   
   private boolean pickedUpPiece = false;
   private boolean undo = false;
-  private boolean won[] = {false, false};
+  private ArrayList<Boolean> won = new ArrayList<Boolean>();
   
-  private int prevMovePos[] = new int[2];
+  private Vector2D prevMovePos = new Vector2D(0, 0);
   
   private int turn = 0;
   
   //Mousepress variables
-  private int prevMouse[] = new int[2];
-  private int newMouse[] = new int[2];
+  private Vector2D prevMouse = new Vector2D(0, 0);
+  private Vector2D newMouse = new Vector2D(0, 0);
   
   private int gameMode = 0;
   private int boardSize = 8;
@@ -34,7 +34,7 @@ public class Game {
   }
   
   public boolean getWon(int i){
-    return won[i];
+    return won.get(i);
   }
   
   public void setBoardSize(int i){
@@ -65,12 +65,15 @@ public class Game {
     pickedUpPiece = i;
   }
   
-  public int[] getNewMouse(){
+  public Vector2D getNewMouse(){
     return newMouse;
   }
   
   
   public void gameSetup(){
+    won.add(false);
+    won.add(false);
+  
     if(boardSize < 8 || boardSize % 2 == 1){
       boardSize = 8;
       cellSize = 800 / boardSize;
@@ -82,8 +85,8 @@ public class Game {
     
     cellSize = 800 / boardSize;
     
-    won[0] = false;
-    won[1] = false;
+    won.set(0, false);
+    won.set(1, false);
     undo = false;
     
     board = new ChessBoard();
@@ -124,11 +127,11 @@ public class Game {
     
     
     //Display win text.
-    if(won[0]){
+    if(won.get(0)){
       fill(0, 0, 0);
       textSize(150);
       text("Black Won", 400, 450);
-    } else if (won[1]){
+    } else if (won.get(1)){
       fill(0, 0, 0);
       textSize(150);
       text("White Won", 400, 450);
@@ -149,12 +152,21 @@ public class Game {
       undo();
     } else if(mouseX < cellSize * boardSize && mouseY < cellSize * boardSize && !board.getPieceSelection() && !board.getPieceSelectionPawn()){
       
-      prevMouse[0] = newMouse[0];
-      prevMouse[1] = newMouse[1];
-      newMouse[0] = (int) Math.floor(mouseX / cellSize);
-      newMouse[1] = (int) Math.floor(mouseY / cellSize);
+      prevMouse.setX(newMouse.getX());
+      prevMouse.setY(newMouse.getY());
+      newMouse.setX((int) Math.floor(mouseX / cellSize));
+      newMouse.setY((int) Math.floor(mouseY / cellSize));
     
-    
+      
+      println("");
+      println("x: " + newMouse.getX() + " " + prevMouse.getX());
+      println("y: " + newMouse.getY() + " " + prevMouse.getY());
+      if(board.getChessPiece(newMouse) != null){
+        println(board.getChessPiece(newMouse).getType());
+      } else {
+        println("null");
+      }
+      
       //makes sure that the curser is inside the chessboard.
       if((int) Math.floor(mouseX / cellSize) < boardSize){
         
@@ -162,46 +174,46 @@ public class Game {
         if(!pickedUpPiece){
           
           //Checks if the mouse is where a legal piece is.
-          if(board.getChessPiece(newMouse[0], newMouse[1]) != null && board.getChessPiece(newMouse[0], newMouse[1]).getTeam() == turn % 2){
-            board.getChessPiece(newMouse[0], newMouse[1]).setIsPickedUp(true); //Tells the piece that it is picked up.
+          if(board.getChessPiece(newMouse) != null && board.getChessPiece(newMouse).getTeam() == turn % 2){
+            board.getChessPiece(newMouse).setIsPickedUp(true); //Tells the piece that it is picked up.
             pickedUpPiece = true;
           }
           
         } else { //When a user already has a piece picked up.
         
           //if the chosen chesspiece can move in that way.
-          if(board.getChessPiece(prevMouse[0], prevMouse[1]).movement(newMouse[0], newMouse[1])){
+          println(newMouse.getX() + "  " + newMouse.getY());
+          if(board.getChessPiece(prevMouse).movement(newMouse)){
             
             //There is an error with Passant removing a piece before the board can be saved, so in those cases, do we save the board in the passant function.
-            if(!board.getChessPiece(prevMouse[0], prevMouse[1]).getPerformedPassant()){
+            if(!board.getChessPiece(prevMouse).getPerformedPassant()){
               previousMoveBoard.setMatrix(board.getMatrix()); //saves the previous move.
             }
             
-            prevMovePos[0] = board.getChessPiece(prevMouse[0], prevMouse[1]).getPosition(0);
-            prevMovePos[1] = board.getChessPiece(prevMouse[0], prevMouse[1]).getPosition(1);
+            prevMovePos.setX(board.getChessPiece(prevMouse).getPositionX());
+            prevMovePos.setY(board.getChessPiece(prevMouse).getPositionY());
             
             
             //If the piece kills another.
-            if(board.getChessPiece(newMouse[0], newMouse[1]) != null){
-              if(board.getChessPiece(newMouse[0], newMouse[1]).getType() == "King"){
-                won[board.getChessPiece(newMouse[0], newMouse[1]).getTeam()] = true;
+            if(board.getChessPiece(newMouse) != null){
+              if(board.getChessPiece(newMouse).getType() == "King"){
+                won.set(board.getChessPiece(newMouse).getTeam(), true);
               }
-              score.addTeamScore(board.getChessPiece(newMouse[0], newMouse[1]).getValue(), turn % 2);
-              score.addChessPieceType(board.getChessPiece(newMouse[0], newMouse[1]).getType(), turn % 2);
+              score.addTeamScore(board.getChessPiece(newMouse).getValue(), turn % 2);
+              score.addChessPieceType(board.getChessPiece(newMouse).getType(), turn % 2);
               score.setJustKilledPiece(true);
               
-            } else if(board.getChessPiece(prevMouse[0], prevMouse[1]).getPerformedPassant()){
-              println("test");
+            } else if(board.getChessPiece(prevMouse).getPerformedPassant()){
               score.setJustKilledPiece(true);
               
             } else {
               score.setJustKilledPiece(false);
             }
             
-            board.getChessPiece(prevMouse[0], prevMouse[1]).setIsPickedUp(false); //Lets the picked up piece know that it is not picked up anymore.
-            board.setChessPiece(prevMouse[0], prevMouse[1], newMouse[0], newMouse[1]); //Puts the picked up piece into the cell that matches its new spot.
-            board.getChessPiece(prevMouse[0], prevMouse[1]).setPosition(newMouse[0], newMouse[1]); //Sets the piece position inside the piece object.
-            board.removeChessPiece(prevMouse[0], prevMouse[1]); //Remove the pointer to the piece in the previous spot.
+            board.getChessPiece(prevMouse).setIsPickedUp(false); //Lets the picked up piece know that it is not picked up anymore.
+            board.setChessPiece(prevMouse, newMouse); //Puts the picked up piece into the cell that matches its new spot.
+            board.getChessPiece(prevMouse).setPosition(newMouse); //Sets the piece position inside the piece object.
+            board.removeChessPiece(prevMouse); //Remove the pointer to the piece in the previous spot.
             
             
             turn++; //increases the turn number
@@ -209,24 +221,19 @@ public class Game {
             saveAndLoad.saveData(this);
               
           } else {
-            board.getChessPiece(prevMouse[0], prevMouse[1]).setIsPickedUp(false); //Lets the picked up piece know that it is not picked up anymore.
+            board.getChessPiece(prevMouse).setIsPickedUp(false); //Lets the picked up piece know that it is not picked up anymore.
           }
           
           pickedUpPiece = false;
         }
         
-        println("");
-        println("x: " + newMouse[0] + " " + prevMouse[0]);
-        println("y: " + newMouse[1] + " " + prevMouse[1]);
-        println(pickedUpPiece);
-        println(turn);
       }
       
       
     } else if(board.getPieceSelection()){
       
-      newMouse[0] = (int) Math.floor(mouseX / cellSize);
-      newMouse[1] = (int) Math.floor(mouseY / cellSize);
+      newMouse.setX((int) Math.floor(mouseX / cellSize));
+      newMouse.setY((int) Math.floor(mouseY / cellSize));
       
       board.mousePressedSelectionBar();
       
@@ -235,6 +242,8 @@ public class Game {
       board.mousePressedSelectionBarPawn();
       
     }
+    
+    //println(turn);
     
   }
   
@@ -253,12 +262,12 @@ public class Game {
       }
       
       //There is a couple moves you can only do if a piece hasn't moved before. Here we revert it, so it still "hasn't moved" if it hadn't before the this turn.
-      if(!board.getChessPiece(prevMovePos[0], prevMovePos[1]).getPrevHasMoved()){
-        board.getChessPiece(prevMovePos[0], prevMovePos[1]).setHasMoved(false);
+      if(!board.getChessPiece(prevMovePos).getPrevHasMoved()){
+        board.getChessPiece(prevMovePos).setHasMoved(false);
       }
       
       //Resets the moved piece internal position.
-      board.getChessPiece(prevMovePos[0], prevMovePos[1]).setPosition(prevMovePos[0], prevMovePos[1]);
+      board.getChessPiece(prevMovePos).setPosition(prevMovePos);
       
       //Runs an undo function in the score class, which undo the anything that happend to the score this turn.
       score.undo(turn % 2);
@@ -283,8 +292,8 @@ public class Game {
   void drawChessPieces(){
     for(int i = 0; i < boardSize; i++){
       for(int j = 0; j < boardSize; j++){
-        if(board.getChessPiece(i, j) != null){
-          board.getChessPiece(i, j).displayImage();
+        if(board.getChessPiece(new Vector2D(i, j)) != null){
+          board.getChessPiece(new Vector2D(i, j)).displayImage();
         }
       }
     }

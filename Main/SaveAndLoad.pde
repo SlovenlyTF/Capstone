@@ -24,27 +24,27 @@ public class SaveAndLoad {
         
         switch(type){ //Creates the piece on the board to match the type found.
           case "Pawn":
-            game.board.chessBoard[j][i] = new Pawn(cellData[(i * game.getBoardSize()) + j].getInt("team"), j, i, game.board);
+            game.board.chessBoard[j][i] = new Pawn(cellData[(i * game.getBoardSize()) + j].getInt("team"), new Vector2D(j, i), game.board);
             break;
             
           case "Bishop":
-            game.board.chessBoard[j][i] = new Bishop(cellData[(i * game.getBoardSize()) + j].getInt("team"), j, i, game.board);
+            game.board.chessBoard[j][i] = new Bishop(cellData[(i * game.getBoardSize()) + j].getInt("team"), new Vector2D(j, i), game.board);
             break;
             
           case "Knight":
-            game.board.chessBoard[j][i] = new Knight(cellData[(i * game.getBoardSize()) + j].getInt("team"), j, i, game.board);
+            game.board.chessBoard[j][i] = new Knight(cellData[(i * game.getBoardSize()) + j].getInt("team"), new Vector2D(j, i), game.board);
             break;
             
           case "Rook":
-            game.board.chessBoard[j][i] = new Rook(cellData[(i * game.getBoardSize()) + j].getInt("team"), j, i, game.board);
+            game.board.chessBoard[j][i] = new Rook(cellData[(i * game.getBoardSize()) + j].getInt("team"), new Vector2D(j, i), game.board);
             break;
             
           case "Queen":
-            game.board.chessBoard[j][i] = new Queen(cellData[(i * game.getBoardSize()) + j].getInt("team"), j, i, game.board);
+            game.board.chessBoard[j][i] = new Queen(cellData[(i * game.getBoardSize()) + j].getInt("team"), new Vector2D(j, i), game.board);
             break;
             
           case "King":
-            game.board.chessBoard[j][i] = new King(cellData[(i * game.getBoardSize()) + j].getInt("team"), j, i, game.board);
+            game.board.chessBoard[j][i] = new King(cellData[(i * game.getBoardSize()) + j].getInt("team"), new Vector2D(j, i), game.board);
             break;
             
           default:
@@ -53,11 +53,11 @@ public class SaveAndLoad {
         }
         
         //Sets if it has moved or not.
-        if(game.board.getChessPiece(j, i) != null){
+        if(game.board.getChessPiece(new Vector2D(j, i)) != null){
           if(cellData[(i * game.getBoardSize()) + j].getInt("hasMoved") == 0){
-            game.board.getChessPiece(j, i).setHasMoved(true);
+            game.board.getChessPiece(new Vector2D(j, i)).setHasMoved(true);
           } else {
-            game.board.getChessPiece(j, i).setHasMoved(false);
+            game.board.getChessPiece(new Vector2D(j, i)).setHasMoved(false);
           }
         }
       }
@@ -130,14 +130,14 @@ public class SaveAndLoad {
         XML cellData = boardData.addChild("cellData");
         
         //In case the cell is empty.
-        if(game.board.getChessPiece(j, i) == null){
+        if(game.board.getChessPiece(new Vector2D(j, i)) == null){
           cellData.setString("type", "Empty");
         } else {
           
           
-          cellData.setString("type", game.board.getChessPiece(j, i).getType()); //Saves the type.
-          cellData.setInt("team", game.board.getChessPiece(j, i).getTeam()); //Saves which team it is on.
-          if(game.board.getChessPiece(j, i).getHasMoved()){ //It can't save booleans, so I'll just save 0 for false and 1 for true.
+          cellData.setString("type", game.board.getChessPiece(new Vector2D(j, i)).getType()); //Saves the type.
+          cellData.setInt("team", game.board.getChessPiece(new Vector2D(j, i)).getTeam()); //Saves which team it is on.
+          if(game.board.getChessPiece(new Vector2D(j, i)).getHasMoved()){ //It can't save booleans, so I'll just save 0 for false and 1 for true.
             cellData.setInt("hasMoved", 1);
           } else {
             cellData.setInt("hasMoved", 0);

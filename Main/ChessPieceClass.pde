@@ -2,7 +2,7 @@ public abstract class ChessPieceClass implements ChessPieceInterface{
   
   protected int team;
   protected int value;
-  protected int position[] = new int[2];
+  protected Vector2D position = new Vector2D(0, 0);
   protected boolean isPickedUp = false;
   protected String type;
   protected boolean prevHasMoved = false;
@@ -12,13 +12,33 @@ public abstract class ChessPieceClass implements ChessPieceInterface{
   
   PImage img;
   
-  public void setPosition(int x, int y){
-    position[0] = x;
-    position[1] = y;
+  public ChessPieceClass(int setTeam, Vector2D coords, ChessBoard tempBoard, int tempValue, String tempType, String whiteImg, String blackImg){
+    team = setTeam;
+    position.setX(coords.getX());
+    position.setY(coords.getY());
+    board = tempBoard;
+    
+    value = tempValue;
+    type = tempType;
+    if(team == 0){
+      img = loadImage(whiteImg);
+    } else {
+      img = loadImage(blackImg);
+    }
+    
   }
   
-  public int getPosition(int i){
-    return position[i];
+  public void setPosition(Vector2D coords){
+    position.setX(coords.getX());
+    position.setY(coords.getY());
+  }
+  
+  public int getPositionX(){
+    return position.getX();
+  }
+  
+  public int getPositionY(){
+    return position.getY();
   }
   
   public void setTeam(int i){
@@ -59,10 +79,10 @@ public abstract class ChessPieceClass implements ChessPieceInterface{
     if(isPickedUp){
       tint(255, 150);
       image(img, mouseX - (game.getCellSize() / 2), mouseY - (game.getCellSize() / 2), game.getCellSize(), game.getCellSize());
-      image(img, game.getCellSize()*position[0], game.getCellSize()*position[1], game.getCellSize(), game.getCellSize());
+      image(img, game.getCellSize()*position.getX(), game.getCellSize()*position.getY(), game.getCellSize(), game.getCellSize());
       tint(255, 255);
     } else {
-      image(img, game.getCellSize()*position[0], game.getCellSize()*position[1], game.getCellSize(), game.getCellSize());
+      image(img, game.getCellSize()*position.getX(), game.getCellSize()*position.getY(), game.getCellSize(), game.getCellSize());
     }
   }
   
@@ -95,9 +115,9 @@ public abstract class ChessPieceClass implements ChessPieceInterface{
     }
   }
   
-  public void convert(int x, int y){
-    board.removeChessPiece(x, y);
-    board.spawnNewPiece(x, y, game.getTurn() % 2 - 1, board.getSelectedType());
+  public void convert(Vector2D coords){
+    board.removeChessPiece(coords);
+    board.spawnNewPiece(coords, game.getTurn() % 2 - 1, board.getSelectedType());
     board.setPieceSelectionPawn(false);
   }
   
