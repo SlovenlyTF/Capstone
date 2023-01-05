@@ -115,6 +115,10 @@ public class Game extends PApplet {
     board = new ChessBoard(this, sketch);
     score = new ScoreBoard(sketch);
     previousMoveBoard = new ChessBoard(this, sketch);
+
+
+    mainMySketch.getTesting().setOnGameboardSetup(board, score, previousMoveBoard);
+    mainMySketch.getTesting().testOnGameboardSetup();
     
     if(newGame){
       board.setUp(gameMode);
@@ -194,34 +198,18 @@ public class Game extends PApplet {
       undo();
       return;
     }
-    
-    
-    //Check for a classic game move.
+
+
+    /*
+    Makes sure that the curser is inside the chessboard.
+    This is because if the board is not a perfect division of 8, are there a tiny gap at some of the egdes.
+    This crashes the program, if the mouse is clicked in that space. */
     if(!(mouseX < cellSize * boardSize && mouseY < cellSize * boardSize)){
       return;
     }
-    
-    
-    /**
-    * Makes sure that the curser is inside the chessboard.
-    * This is because if the board is not a perfect division of 8, are there a tiny gap at some of the egdes.
-    * This crashsed the program, is the mouse is clicked in that space.
-    */
-    if(!((int) Math.floor(mouseX / cellSize) < boardSize)){
-      return;
-    }
-    
-    
-    //Just prints some debug text.
-    System.out.println("");
-    System.out.println("Prev: " + "(" + prevMouse.getX() + "," + prevMouse.getY() + ")");
-    System.out.println("New: " + "(" + newMouse.getX() + "," + newMouse.getY() + ")");
-    if(board.getChessPiece(newMouse) != null){
-      System.out.println(board.getChessPiece(newMouse).getType());
-    } else {
-      System.out.println("null");
-    }
-    
+
+
+    mainMySketch.getTesting().testOnPieceMoveAttempt(prevMouse, newMouse);
       
     //Checks if the user has picked up a piece.
     if(!pickedUpPiece){
@@ -274,8 +262,9 @@ public class Game extends PApplet {
     board.setChessPiece(prevMouse, newMouse); //Puts the picked up piece into the cell that matches its new spot.
     board.getChessPiece(prevMouse).setPosition(newMouse); //Sets the piece position inside the piece object.
     board.removeChessPiece(prevMouse); //Remove the pointer to the piece in the previous spot.
-    
-    
+
+
+    mainMySketch.getTesting().testOnPieceMove(prevMouse, newMouse); //Only used for testing and debugging.
     turn++; //increases the turn number
     undo = true;
     saveAndLoad.saveData(this);

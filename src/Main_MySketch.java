@@ -17,7 +17,12 @@ public class Main_MySketch extends PApplet{
 
     private StartMenu startMenu;
 
+    private testing testing;
 
+
+    public testing getTesting() {
+        return testing;
+    }
     public void setStartScreen(boolean startScreen) {
         this.startScreen = startScreen;
     }
@@ -27,6 +32,7 @@ public class Main_MySketch extends PApplet{
         saveAndLoadData = new SaveAndLoad(this);
         game = new Game(saveAndLoadData, mainMySketch, this);
         startMenu = new StartMenu(game, saveAndLoadData, this);
+        testing = new testing(game, startMenu);
     }
 
     //Is run once when the program is launched.
@@ -39,6 +45,7 @@ public class Main_MySketch extends PApplet{
 
         game.gameSetup();
         startMenu.startMenuSetup();
+        testing.testStartup();
     }
 
 

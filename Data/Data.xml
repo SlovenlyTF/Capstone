@@ -36,11 +36,6 @@
     <cellData type="Empty"/>
     <cellData type="Empty"/>
     <cellData type="Empty"/>
-    <cellData type="Empty"/>
-    <cellData type="Empty"/>
-    <cellData type="Empty"/>
-    <cellData type="Empty"/>
-    <cellData type="Empty"/>
     <cellData hasMoved="1" team="0" type="Pawn"/>
     <cellData type="Empty"/>
     <cellData type="Empty"/>
@@ -50,14 +45,19 @@
     <cellData type="Empty"/>
     <cellData type="Empty"/>
     <cellData type="Empty"/>
-    <cellData hasMoved="0" team="0" type="Pawn"/>
-    <cellData hasMoved="0" team="0" type="Pawn"/>
-    <cellData hasMoved="0" team="0" type="Pawn"/>
-    <cellData hasMoved="0" team="0" type="Pawn"/>
-    <cellData hasMoved="0" team="0" type="Pawn"/>
+    <cellData type="Empty"/>
+    <cellData type="Empty"/>
+    <cellData type="Empty"/>
+    <cellData type="Empty"/>
+    <cellData type="Empty"/>
     <cellData hasMoved="0" team="0" type="Pawn"/>
     <cellData hasMoved="0" team="0" type="Pawn"/>
     <cellData type="Empty"/>
+    <cellData hasMoved="0" team="0" type="Pawn"/>
+    <cellData hasMoved="0" team="0" type="Pawn"/>
+    <cellData hasMoved="0" team="0" type="Pawn"/>
+    <cellData hasMoved="0" team="0" type="Pawn"/>
+    <cellData hasMoved="0" team="0" type="Pawn"/>
     <cellData hasMoved="0" team="0" type="Rook"/>
     <cellData hasMoved="0" team="0" type="Knight"/>
     <cellData hasMoved="0" team="0" type="Bishop"/>
