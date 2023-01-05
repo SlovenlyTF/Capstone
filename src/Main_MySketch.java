@@ -6,17 +6,11 @@ import processing.core.PImage;
 public class Main_MySketch extends PApplet{
 
     private boolean startScreen = true;
-
     private PImage background;
-
     private static Main_MySketch mainMySketch;
-
     private SaveAndLoad saveAndLoadData;
-
     private Game game;
-
     private StartMenu startMenu;
-
     private testing testing;
 
 
