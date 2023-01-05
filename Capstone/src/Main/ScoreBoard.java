@@ -42,16 +42,8 @@ public class ScoreBoard extends PApplet {
     return teamScore.get(team);
   }
 
-  public int getPrevScore(){
-    return prevScore;
-  }
-
   public void setJustKilledPiece(boolean i){
     justKilledPiece = i;
-  }
-
-  public boolean getJustKilledPiece(){
-    return justKilledPiece;
   }
 
   public StringList getKilledChessPiecesTeamWhite() {
