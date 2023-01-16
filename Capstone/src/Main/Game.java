@@ -1,3 +1,8 @@
+//Tobias Friese
+//tfries21@student.aau.dk
+//06-01-2023
+//OOP Software AAU Semester 3
+
 package Main;
 
 import processing.core.PApplet;
@@ -122,12 +127,18 @@ public class Game extends PApplet {
     
   }
   
-  /**Runs each frame.
-  *  Runs primarily all the visual code.
-  *  Sets the background and checkers squares.
-  *  Draws the individual chesspieces.
-  *  Draws the score.
+  /**
+   *
   */
+  /**
+   * Runs each frame.
+   * Runs primarily all the visual code.
+   * Sets the background and checkers squares.
+   * Draws the individual chesspieces.
+   * Draws the score.
+   * @param mouseY Just the mouse position at the Y coordinate.
+   * @param mouseX Just the mouse position at the X coordinate.
+   */
   public void drawGame(int mouseY, int mouseX){
     chessBoardSquares();
     
@@ -164,7 +175,11 @@ public class Game extends PApplet {
     
   }
 
-
+  /**
+   * Runs each time the mouse is clicked while in a game.
+   * @param mouseY Just the mouse position at the Y coordinate.
+   * @param mouseX Just the mouse position at the X coordinate.
+   */
   public void gameMousePressed(int mouseY, int mouseX){
     
     prevMouse.setX(newMouse.getX());
@@ -266,8 +281,11 @@ public class Game extends PApplet {
     pickedUpPiece = false;
     
   }
-  
-  //Undo the last move.
+
+
+  /**
+   * Undo the last move.
+   */
   private void undo(){
     if(!undo){ //Just a failsafe, so it can't undo multiple times in a row.
       return;
@@ -301,15 +319,25 @@ public class Game extends PApplet {
     saveAndLoad.saveData(this);
   }
   
-  //If the key z is pressed, it also undo the last turn.
+  //
+
+  /**
+   * Runs each time a key on the keyboard is pressed when in a game.
+   * If the key z is pressed, it undo's the last turn.
+   * @param key The key that is pressed on the keyboard.
+   */
   public void gameKeyPressed(char key) {
     if(key == 'z' && !board.getPieceSelection() && !board.getPieceSelectionPawn()){
       undo();
     }
   }
-  
-  
-  //Display the image of all the pieces.
+
+
+  /**
+   * Display the image of all the pieces.
+   * @param mouseX Just the mouse position at the X coordinate.
+   * @param mouseY Just the mouse position at the Y coordinate.
+   */
   private void drawChessPieces(int mouseX, int mouseY){
     for(int i = 0; i < boardSize; i++){
       for(int j = 0; j < boardSize; j++){
@@ -320,8 +348,10 @@ public class Game extends PApplet {
     }
   }
   
-  
-  //Display the checkers pattern that a chessboard has.
+
+  /**
+   * Display the checkers pattern that a chessboard has.
+   */
   private void chessBoardSquares(){
     boolean white = false;
     

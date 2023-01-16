@@ -1,3 +1,8 @@
+//Tobias Friese
+//tfries21@student.aau.dk
+//06-01-2023
+//OOP Software AAU Semester 3
+
 package ChessPieces;
 
 import Main.ChessBoard;
@@ -20,7 +25,7 @@ public class Queen extends ChessPieceClass {
   @Override
   public boolean movement(Vector2D newCoords){
     
-    //Makes sure that the desired super.getPosition() has no piece or it's an enemy piece.
+    //Makes sure that the desired position has no piece or it's an enemy piece.
     if(!(board.getChessPiece(new Vector2D(newCoords.getX(), newCoords.getY())) == null || super.getTeam() != board.getChessPiece(new Vector2D(newCoords.getX(), newCoords.getY())).getTeam())){
       return false;
     }
@@ -29,8 +34,7 @@ public class Queen extends ChessPieceClass {
     if(!(Math.abs(super.getPosition().getX() - newCoords.getX()) == Math.abs(super.getPosition().getY() - newCoords.getY()) || super.getPosition().getX() - newCoords.getX() == 0 || super.getPosition().getY() - newCoords.getY() == 0)){
       return false;
     }
-    
-    //Default is down right.
+
     int horizontal = 0;
     int vertical = 0;
     
@@ -48,15 +52,15 @@ public class Queen extends ChessPieceClass {
       vertical = 1;
     }
     
-    //Checks if there is a piece between the current super.getPosition() and the desired super.getPosition().
+    //Checks if there is a piece between the current position and the desired position.
     for(int i = super.getPosition().getX() + horizontal, j = super.getPosition().getY() + vertical; (0 != Math.abs(i - newCoords.getX()) || 0 != Math.abs(j - newCoords.getY())); i += horizontal, j += vertical){
       if(board.getChessPiece(new Vector2D(i, j)) != null){
         return false;
       }
     }
-    
-    
-    revertVariables(); //Just set reverts justCastled boolean back after a successful move that is not a castle.
+
+
+    super.revertVariables(); //Just set reverts justCastled and pawnDoubleMove boolean back after a successful move that is not a castle.
     return true;
   }
   

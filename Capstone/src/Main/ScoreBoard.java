@@ -1,3 +1,8 @@
+//Tobias Friese
+//tfries21@student.aau.dk
+//06-01-2023
+//OOP Software AAU Semester 3
+
 package Main;
 
 import processing.core.PApplet;
@@ -97,7 +102,9 @@ public class ScoreBoard extends PApplet {
   }
 
 
-
+  /**
+   * Display the score on the sidebar.
+   */
   public void displayScore(){
     sketch.fill(0, 0, 0);
     //textAlign(CENTER);
@@ -107,7 +114,9 @@ public class ScoreBoard extends PApplet {
   }
 
 
-
+  /**
+   * Display the pieces on the sidebar.
+   */
   public void displayPieces(){
 
     for(int i = 0; i < killedChessPiecesTeamBlack.size(); i++){

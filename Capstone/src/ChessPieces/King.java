@@ -1,3 +1,8 @@
+//Tobias Friese
+//tfries21@student.aau.dk
+//06-01-2023
+//OOP Software AAU Semester 3
+
 package ChessPieces;
 
 import Main.ChessBoard;
@@ -68,12 +73,12 @@ public class King extends ChessPieceClass {
     }
 
 
-    //Checks if the movement done is one space from its original postition.
+    //Checks if the movement done is one space from its original position.
     if(!(Math.abs(super.getPosition().getX() - newCoords.getX()) < 2 && Math.abs(super.getPosition().getY() - newCoords.getY()) < 2)){
       return false;
     }
 
-    revertVariables(); //Just reverts justCastled and doublePawn boolean.
+    super.revertVariables(); //Just set reverts justCastled and pawnDoubleMove boolean back after a successful move that is not a castle.
 
     super.setPrevHasMoved(super.getHasMoved());
     super.setHasMoved(true);

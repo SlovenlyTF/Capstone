@@ -1,3 +1,8 @@
+//Tobias Friese
+//tfries21@student.aau.dk
+//06-01-2023
+//OOP Software AAU Semester 3
+
 package Main;
 
 import processing.core.PApplet;
@@ -22,6 +27,11 @@ public class Main_MySketch extends PApplet{
         this.startScreen = startScreen;
     }
 
+
+    /**
+     * Is run with right before the setup.
+     * Its main purpose is to set the size of the screen
+     */
     public void settings(){
         size(900, 800); //Sets the window size.
         saveAndLoadData = new SaveAndLoad(this);
@@ -30,7 +40,10 @@ public class Main_MySketch extends PApplet{
         testing = new Testing(game, startMenu);
     }
 
-    //Is run once when the program is launched.
+
+    /**
+     * Is run once when the program is launched.
+     */
     public void setup() {
         frameRate(60); //Sets the framerate.
 
@@ -46,7 +59,7 @@ public class Main_MySketch extends PApplet{
 
     /**
      * Runs each frame.
-     *  Runs primarily all the visual code.
+     * Runs primarily all the visual code.
      */
     public void draw(){
 
@@ -61,7 +74,9 @@ public class Main_MySketch extends PApplet{
     }
 
 
-
+    /**
+     * Runs every time the mouse is clicked.
+     */
     public void mousePressed(){
         if(startScreen){
             startMenu.startMenuMousePressed(mouseY, mouseX);
@@ -72,7 +87,9 @@ public class Main_MySketch extends PApplet{
     }
 
 
-
+    /**
+     * Runs every time a key is pressed on the keyboard.
+     */
     public void keyPressed() {
         startMenu.setKeyCodeVar(keyCode);
         if(!startScreen){
@@ -88,7 +105,9 @@ public class Main_MySketch extends PApplet{
         }
     }
 
-
+    /**
+     * Runs every time the key that was pressed is released.
+     */
     public void keyReleased(){
         startMenu.setKeyCodeVar(0);
         keyCode = 0;

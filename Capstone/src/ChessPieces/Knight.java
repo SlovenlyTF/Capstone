@@ -1,3 +1,8 @@
+//Tobias Friese
+//tfries21@student.aau.dk
+//06-01-2023
+//OOP Software AAU Semester 3
+
 package ChessPieces;
 
 import Main.ChessBoard;
@@ -26,7 +31,7 @@ public class Knight extends ChessPieceClass {
     
       //Checks if the movement done is in an L shape.
       if((Math.abs(super.getPosition().getX() - newCoords.getX()) == 2 && Math.abs(super.getPosition().getY() - newCoords.getY()) == 1) || (Math.abs(super.getPosition().getX() - newCoords.getX()) == 1 && Math.abs(super.getPosition().getY() - newCoords.getY()) == 2)){
-        revertVariables(); //Just set reverts justCastled boolean back after a successful move that is not a castle.
+        super.revertVariables(); //Just set reverts justCastled and pawnDoubleMove boolean back after a successful move that is not a castle.
         return true;
       }
 

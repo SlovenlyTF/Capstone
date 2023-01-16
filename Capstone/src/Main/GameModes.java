@@ -1,3 +1,8 @@
+//Tobias Friese
+//tfries21@student.aau.dk
+//06-01-2023
+//OOP Software AAU Semester 3
+
 package Main;
 
 import processing.core.PApplet;
@@ -38,8 +43,10 @@ public class GameModes { //This class is kinda unnesesary. It was just to split 
   }
   
   
-  
-  //Sets up a standard game of chess.
+
+  /**
+   * Sets up a standard game of chess.
+   */
   private void standardSetUp(){
     
     //Creates Black special pieces
@@ -67,8 +74,10 @@ public class GameModes { //This class is kinda unnesesary. It was just to split 
   }
   
   
-  
-  //Sets up a game of chess with a bunch of knights.
+
+  /**
+   * Sets up a game of chess with a bunch of knights.
+   */
   private void knightSetUp(){
     
     //Creates Black special pieces
@@ -94,15 +103,19 @@ public class GameModes { //This class is kinda unnesesary. It was just to split 
     
     createPawns(); //Creates the pawns.
   }
-  
-  
-  
+
+
+  /**
+   * Sets the point buy system to activate.
+   */
   public void pointBuySystem() {
     board.setPieceSelection(true);
   }
-  
-  
-  
+
+
+  /**
+   * Create all the pawns on the board.
+   */
   private void createPawns(){
     //Creates the black pawns.
     for(int i = 0; i < game.getBoardSize(); i++){

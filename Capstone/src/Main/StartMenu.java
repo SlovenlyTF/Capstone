@@ -1,3 +1,8 @@
+//Tobias Friese
+//tfries21@student.aau.dk
+//06-01-2023
+//OOP Software AAU Semester 3
+
 package Main;
 
 import processing.core.PApplet;
@@ -55,9 +60,11 @@ public class StartMenu extends PApplet {
     gamemodes.add(loadImage(sketchPath("Data/Images/Point Buy.png")));
     
   }
-  
-  
-  
+
+
+  /**
+   * Runs every frame on the main menu.
+   */
   public void startMenuDraw(){
 
     sketch.fill(0, 0, 0);
@@ -100,9 +107,13 @@ public class StartMenu extends PApplet {
     
   }
   
-  
-  
-  //All the buttons on the main screen:
+
+  /**
+   * All the buttons on the main screen.
+   * Runs every time the mouse is clicked on the main menu.
+   * @param mouseY Just the mouse position at the Y coordinate.
+   * @param mouseX Just the mouse position at the X coordinate.
+   */
   public void startMenuMousePressed(int mouseY, int mouseX){
     
     //Start game

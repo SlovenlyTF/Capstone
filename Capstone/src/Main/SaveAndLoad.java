@@ -1,3 +1,8 @@
+//Tobias Friese
+//tfries21@student.aau.dk
+//06-01-2023
+//OOP Software AAU Semester 3
+
 package Main;
 
 import processing.core.PApplet;
@@ -15,7 +20,11 @@ public class SaveAndLoad extends PApplet {
   public SaveAndLoad(PApplet sketch){
     this.sketch = sketch;
   }
-  
+
+  /**
+   * Loads the currently saved game, from an XML data file.
+   * @param game The game object that runs the game.
+   */
   public void loadData(Game game){
     Data = loadXML(sketchPath("Data/Data.xml"));
     
@@ -101,7 +110,11 @@ public class SaveAndLoad extends PApplet {
   }
 
 
-  
+  /**
+   * Saves the game to the XML data file.
+   * This code is run after every successful move.
+   * @param game The game object that runs the game.
+   */
   public void saveData(Game game){
     
     XML TemplateData = loadXML(sketchPath("Data/Template Data.xml"));

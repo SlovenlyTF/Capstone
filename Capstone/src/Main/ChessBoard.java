@@ -1,3 +1,8 @@
+//Tobias Friese
+//tfries21@student.aau.dk
+//06-01-2023
+//OOP Software AAU Semester 3
+
 package Main;
 
 import processing.core.PApplet;
@@ -86,10 +91,6 @@ public class ChessBoard extends PApplet {
         pawnPosition = coords;
     }
 
-    public void setSelectedType(String i){
-        selectedType = i;
-    }
-
     public String getSelectedType(){
         return selectedType;
     }
@@ -122,8 +123,11 @@ public class ChessBoard extends PApplet {
     }
 
 
-    /**Sets the pawn boolean, but also sets all pawns in the row for the double move to equal false.
-     *  There are two, one for white and one for black, because there was an error when trying to undo, and not being able to passant after.
+    /**
+     * It is a setter, but more complicated, which is why the comment.
+     * Sets the pawn boolean, but also sets all pawns in the row for the double move to equal false.
+     * There are two, one for white and one for black, because there was an error when trying to undo, and not being able to passant after.
+     * @param setBool Just the input into the setter.
      */
     public void setPawnDoubleMoveWhite(boolean setBool){
 
@@ -150,8 +154,11 @@ public class ChessBoard extends PApplet {
 
 
 
-    /**Sets the pawn boolean, but also sets all pawns in the row for the double move to equal false.
-     *  There are two, one for white and one for black, because there was an error when trying to undo, and not being able to passant after.
+    /**
+     * It is a setter, but more complicated, which is why the comment.
+     * Sets the pawn boolean, but also sets all pawns in the row for the double move to equal false.
+     * There are two, one for white and one for black, because there was an error when trying to undo, and not being able to passant after.
+     * @param setBool Just the input into the setter.
      */
     public void setPawnDoubleMoveBlack(boolean setBool){
 
@@ -176,8 +183,10 @@ public class ChessBoard extends PApplet {
     }
 
 
-
-    //Runs the setup function that matches the selected mode.
+    /**
+     * Runs the setup function that matches the selected mode.
+     * @param mode What gamemode that is selected.
+     */
     public void setUp(int mode){
         gameModes.chooseGameMode(mode);
     }
@@ -199,7 +208,11 @@ public class ChessBoard extends PApplet {
 
 
 
-    //Runs through the matrix and copies each field.
+    /**
+     * Runs through the matrix and copies each field.
+     * This is done since we do not want the pointer to the board object, only the pieces within.
+     * @param otherBoard The board it will be copied over to.
+     */
     public void setChessPieceClassMatrix(ChessPieceClass[][] otherBoard){
         for(int i = 0; i < game.getBoardSize(); i++){
             for(int j = 0; j < game.getBoardSize(); j++){
@@ -209,7 +222,12 @@ public class ChessBoard extends PApplet {
     }
 
 
-
+    /**
+     * Since a castle moves more than one piece, do we have to make more code to accommodate that.
+     * This code could probably be smaller, since it does the same depending on the team but with new coordinates.
+     * But this was the "best" way I could think of in the moment.
+     * @param team What team that just did the castle.
+     */
     public void undoCastle(int team){
         if(!justCastled){
             return;
@@ -220,12 +238,12 @@ public class ChessBoard extends PApplet {
                 chessBoard[(game.getBoardSize() / 2) - 1][game.getBoardSize() - 1].setPosition(new Vector2D(0, game.getBoardSize() - 1)); //Sets the rook object position back.
                 setChessPieceClassMatrix(game.getPreviousMoveBoard().getChessPieceClassMatrix()); //Reverts the board matrix back for the king.
                 chessBoard[0][game.getBoardSize() - 1] = chessBoard[(game.getBoardSize() / 2) - 1][game.getBoardSize() - 1]; //Puts the rook back in the chessboard matrix because the previousMoveBoard didn't save it, since it's only made for one piece to move at a time.
-                chessBoard[(game.getBoardSize() / 2) - 1][game.getBoardSize() - 1] = null; //Deletes the rook from it's castle position.
+                chessBoard[(game.getBoardSize() / 2) - 1][game.getBoardSize() - 1] = null; //Deletes the rook from its castle position.
             } else { //If the king is moved to the Right in the castle.
                 chessBoard[(game.getBoardSize() / 2) + 1][game.getBoardSize() - 1].setPosition(new Vector2D(game.getBoardSize() - 1, game.getBoardSize() - 1)); //Sets the rook object position back.
                 setChessPieceClassMatrix(game.getPreviousMoveBoard().getChessPieceClassMatrix()); //Reverts the board matrix back for the king.
                 chessBoard[game.getBoardSize() - 1][game.getBoardSize() - 1] = chessBoard[(game.getBoardSize() / 2) + 1][game.getBoardSize() - 1]; //Puts the rook back in the chessboard matrix because the previousMoveBoard didn't save it, since it's only made for one piece to move at a time.
-                chessBoard[(game.getBoardSize() / 2) + 1][game.getBoardSize() - 1] = null; //Deletes the rook from it's castle position.
+                chessBoard[(game.getBoardSize() / 2) + 1][game.getBoardSize() - 1] = null; //Deletes the rook from its castle position.
             }
 
         } else { //Checks if team is black.
@@ -233,12 +251,12 @@ public class ChessBoard extends PApplet {
                 chessBoard[(game.getBoardSize() / 2) - 1][0].setPosition(new Vector2D(0, 0)); //Sets the rook object position back.
                 setChessPieceClassMatrix(game.getPreviousMoveBoard().getChessPieceClassMatrix()); //Reverts the board matrix back for the king.
                 chessBoard[0][0] = chessBoard[(game.getBoardSize() / 2) - 1][0]; //Puts the rook back in the chessboard matrix because the previousMoveBoard didn't save it, since it's only made for one piece to move at a time.
-                chessBoard[(game.getBoardSize() / 2) - 1][0] = null; //Deletes the rook from it's castle position.
+                chessBoard[(game.getBoardSize() / 2) - 1][0] = null; //Deletes the rook from its castle position.
             } else { //If the king is moved to the Right in the castle.
                 chessBoard[(game.getBoardSize() / 2) + 1][0].setPosition(new Vector2D(game.getBoardSize() - 1, 0)); //Sets the rook object position back.
                 setChessPieceClassMatrix(game.getPreviousMoveBoard().getChessPieceClassMatrix()); //Reverts the board matrix back for the king.
                 chessBoard[game.getBoardSize() - 1][0] = chessBoard[(game.getBoardSize() / 2) + 1][0]; //Puts the rook back in the chessboard matrix because the previousMoveBoard didn't save it, since it's only made for one piece to move at a time.
-                chessBoard[(game.getBoardSize() / 2) + 1][0] = null; //Deletes the rook from it's castle position.
+                chessBoard[(game.getBoardSize() / 2) + 1][0] = null; //Deletes the rook from its castle position.
             }
         }
 
@@ -247,7 +265,11 @@ public class ChessBoard extends PApplet {
     }
 
 
-
+    /**
+     * Does the visual code for when the selection bar is up.
+     * @param mouseY Just the mouse position at the Y coordinate.
+     * @param mouseX Just the mouse position at the X coordinate.
+     */
     public void drawSelectionBar(int mouseY, int mouseX){
         sketch.fill(0,0,0);
 
@@ -332,7 +354,12 @@ public class ChessBoard extends PApplet {
     }
 
 
-
+    /**
+     * Runs the code for when the selection bar is up and the player clicks with the mouse.
+     * This code is only for when it is the pawn that has reached the opposite side, not for the point buy gamemode.
+     * @param mouseY Just the mouse position at the Y coordinate.
+     * @param mouseX Just the mouse position at the X coordinate.
+     */
     public void mousePressedSelectionBarPawn(int mouseY, int mouseX){
         if(mouseX > 800 && mouseX < 900 && mouseY > 100 && mouseY < 200){
             selectedType = "Pawn";
@@ -371,7 +398,12 @@ public class ChessBoard extends PApplet {
     }
 
 
-
+    /**
+     * Runs the code for when the selection bar is up and the player clicks with the mouse.
+     * This code is only for when it is the point buy gamemode, not when a pawn has reached the opposite side.
+     * @param mouseY Just the mouse position at the Y coordinate.
+     * @param mouseX Just the mouse position at the X coordinate.
+     */
     public void mousePressedSelectionBar(int mouseY, int mouseX){
 
         if(mouseX > 800 && mouseX < 900 && mouseY > 100 && mouseY < 200 && points.get(teamTurn) > 0){
@@ -397,45 +429,46 @@ public class ChessBoard extends PApplet {
         }
 
 
-        if(game.getPickedUpPiece() && (int) Math.floor(mouseX / game.getCellSize()) < game.getBoardSize() && chessBoard[game.getNewMouse().getX()][game.getNewMouse().getY()] == null){
-            System.out.println(game.getNewMouse().getX() + " " + game.getNewMouse().getY());
-            if(teamTurn == 0 && game.getNewMouse().getY() > (game.getBoardSize() / 2) && points.get(0) >= 0){
-                placeSelectedPiece();
-                teamTurn = 1;
-            }
+        if(!(game.getPickedUpPiece() && (int) Math.floor(mouseX / game.getCellSize()) < game.getBoardSize() && chessBoard[game.getNewMouse().getX()][game.getNewMouse().getY()] == null)) {
+            return;
+        }
+
+        if(teamTurn == 0 && game.getNewMouse().getY() > (game.getBoardSize() / 2) && points.get(0) >= 0){
+            placeSelectedPiece();
+            teamTurn = 1;
+        }
 
 
-            if(teamTurn == 1 && game.getNewMouse().getY() < (game.getBoardSize() / 2) - 1 && points.get(1) >= 0){
-                placeSelectedPiece();
-                teamTurn = 0;
-            }
+        if(teamTurn == 1 && game.getNewMouse().getY() < (game.getBoardSize() / 2) - 1 && points.get(1) >= 0){
+            placeSelectedPiece();
+            teamTurn = 0;
+        }
 
-            System.out.println((game.getBoardSize() * (game.getBoardSize() / 2 - 1)) - 1);
-            System.out.println("placed: " + piecesPlaced.get(teamTurn));
 
-            //When both players have put all their pieces down.
-            if(points.get(0) == -1 && points.get(1) == -1){
+        //When both players have put all their pieces down.
+        if(!(points.get(0) == -1 && points.get(1) == -1)) {
+            return;
+        }
 
-                if(teamTurn == 0 && game.getNewMouse().getY() > (game.getBoardSize() / 2)){
-                    spawnNewPiece(game.getNewMouse(), 0, selectedType);
-                    SelectedPieceImg = blackKingImg;
-                    teamTurn = 1;
-                }
+        if(teamTurn == 0 && game.getNewMouse().getY() > (game.getBoardSize() / 2)){
+            spawnNewPiece(game.getNewMouse(), 0, selectedType);
+            SelectedPieceImg = blackKingImg;
+            teamTurn = 1;
+        }
 
-                if(teamTurn == 1 && game.getNewMouse().getY() < (game.getBoardSize() / 2) - 1){
-                    spawnNewPiece(game.getNewMouse(), 1, selectedType);
-                    game.setPickedUpPiece(false);
-                    pieceSelection = false;
-                }
-            }
-
+        if(teamTurn == 1 && game.getNewMouse().getY() < (game.getBoardSize() / 2) - 1){
+            spawnNewPiece(game.getNewMouse(), 1, selectedType);
+            game.setPickedUpPiece(false);
+            pieceSelection = false;
         }
 
     }
 
 
 
-    //Places the selected piece if it is possible and legal in the point buy gamemode.
+    /**
+     * Places the selected piece if it is possible and legal in the point buy gamemode.
+     */
     public void placeSelectedPiece(){
         spawnNewPiece(game.getNewMouse(), teamTurn, selectedType); //Spawns the piece on the board.
         game.setPickedUpPiece(false); //Sets so the player hasn't automatically a piece picked.

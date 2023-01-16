@@ -1,3 +1,8 @@
+//Tobias Friese
+//tfries21@student.aau.dk
+//06-01-2023
+//OOP Software AAU Semester 3
+
 package ChessPieces;
 
 import Main.ChessBoard;
@@ -44,15 +49,15 @@ public class Bishop extends ChessPieceClass {
     }
     
     
-    //Checks if there is a piece between the current position and the desired super.getPosition().
+    //Checks if there is a piece between the current position and the desired position.
     for(int i = super.getPosition().getX() + horizontal, j = super.getPosition().getY() + vertical; 0 != Math.abs(i - newCoords.getX()); i += horizontal, j += vertical){
       if(board.getChessPiece(new Vector2D(i, j)) != null){
         return false;
       }
     }
-    
-    
-    revertVariables(); //Just set reverts justCastled boolean back after a successful move that is not a castle.
+
+
+    super.revertVariables(); //Just set reverts justCastled and pawnDoubleMove boolean back after a successful move that is not a castle.
     return true;
   }
   

@@ -1,3 +1,8 @@
+//Tobias Friese
+//tfries21@student.aau.dk
+//06-01-2023
+//OOP Software AAU Semester 3
+
 package ChessPieces;
 
 import Main.ChessBoard;
@@ -92,7 +97,12 @@ public abstract class ChessPieceClass extends PApplet implements ChessPieceInter
   }
 
   
-  //Just set reverts justCastled boolean back after a successful move that is not a castle.
+
+
+
+  /**
+   * Just set reverts justCastled and pawnDoubleMove boolean back after a successful move that is not a castle.
+   */
   public void revertVariables(){
     board.setJustCastled(false);
     if(game.getTurn() % 2 == 0){
